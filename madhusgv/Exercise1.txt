@@ -1,0 +1,82 @@
+Program 1 – Write a Ansible Adhoc Commands to create a group called “deploy
+	- ansible localhost -m group -a "name=deploy"
+	- more /etc/group | grep deploy
+	Output
+	=======
+	root@master:~# ansible localhost  -m group -a "name=deploy"
+	localhost | CHANGED => {
+    "changed": true,
+    "gid": 1001,
+    "name": "deploy",
+    "state": "present",
+    "system": false
+	}
+	root@master:~# more /etc/group | grep deploy
+	deploy:x:1001:
+
+Program 2 – Write a Ansible Adhoc Commands to create a user called “deploy-user” which is part of group called “deploy” and with /bin/bash shell.
+	- ansible localhost -m user -a "name=deploy-user group=deploy"
+	- more /etc/passwd | grep deploy-user
+	Output
+	======
+	root@master:~# ansible localhost -m user -a "name=deploy-user group=deploy"
+	localhost | CHANGED => {
+    "changed": true,
+    "comment": "",
+    "create_home": true,
+    "group": 1001,
+    "home": "/home/deploy-user",
+    "name": "deploy-user",
+    "shell": "",
+    "state": "present",
+    "system": false,
+    "uid": 1001
+	}
+	root@master:~# more /etc/passwd | grep deploy-user
+	deploy-user:x:1001:1001::/home/deploy-user:
+	
+Program 3 – Write a Ansible Adhoc commands install package named “httpd” in RHEL/centos/Ubuntu.
+	- ansible localhost -m apt -a "state=present name=apache2"
+		
+	root@master:~# ansible localhost -m apt -a "state=present name=apache2"
+	[WARNING]: Could not find aptitude. Using apt-get instead
+
+	localhost | CHANGED => {
+    "cache_update_time": 1570439733,
+    "cache_updated": false,
+    ....
+	}
+	
+	- which apache2
+	root@master:~# which apache2
+	/usr/sbin/apache2
+
+Program 4 – Write a Ansible Adhoc commands to start and enable the service named “httpd”
+
+	- ansible localhost -m service -a "name=apache2 state=started enbled=true"
+	root@master:~# ansible localhost -m service -a "name=apache2 state=started enabled=true"
+	localhost | SUCCESS => {
+	}
+	-  ps -eaf | grep apache2
+	
+
+Program 5 – Write a Ansible commands to create a file called “index.html” in /var/www/html with some dummy html contents.
+	- ansible localhost -m file -a "path=/var/www/html/index.html state=touch"
+	- http://15.213.94.145/index.html
+	- ansible localhost -m lineinfile -a "path=/var/www/html/index.html state=present line='My Web Page'"
+	- http://15.213.94.145/index.html
+	
+Program 6 – Write a Ansible commands to copy a file called “second.html” in /var/www/html/second.html with some dummy html contents.
+	- ansible localhost -m copy -a "dest=/var/www/html/ src=second.html"
+	- http://15.213.94.145/second.html
+
+Program 7 – Write a Ansible commands to install a package called “git”, “wget”.
+	- ansible localhost -m apt -a "state=present name=git"
+		- which git
+	- ansible localhost -m apt -a "state=present name=wget"
+		- which wget
+
+Program 8 – Write a Ansible Adhoc commands to clone git repo. https://github.com/scmgalaxy/ansible-role-template.
+	- ansible localhost -m git -a "clone=yes dest=/home/madhu repo=https://github.com/scmgalaxy/ansible-role-template"
+	
+
