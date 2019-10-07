@@ -1,0 +1,142 @@
+1---> 
+
+[root@localhost etc]# ansible localhost -m group  -a "state=present name=deploy"
+localhost | CHANGED => {
+    "changed": true,
+    "gid": 1000,
+    "name": "deploy",
+    "state": "present",
+    "system": false
+}
+[root@localhost etc]# more /etc/group | grep deploy
+deploy:x:1000:
+
+
+2---> 
+
+[root@localhost etc]#  ansible localhost -m user  -a "name=deploy-user group=deploy shell=/bin/bash"
+localhost | CHANGED => {
+    "changed": true,
+    "comment": "",
+    "create_home": true,
+    "group": 1000,
+    "home": "/home/deploy-user",
+    "name": "deploy-user",
+    "shell": "/bin/bash",
+    "state": "present",
+    "system": false,
+    "uid": 1000
+}
+[root@localhost etc]# more /etc/passwd | grep deploy-user
+deploy-user:x:1000:1000::/home/deploy-user:/bin/bash
+[root@localhost etc]#
+
+
+3---> 
+
+
+
+[root@localhost etc]# which httpd
+/usr/sbin/httpd
+[root@localhost etc]# ps -eaf | grep httpd
+root     15775     1  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   15776 15775  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   15777 15775  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   15778 15775  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   15779 15775  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   15780 15775  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+root     16056  1630  0 12:15 pts/0    00:00:00 grep --color=auto httpd
+[root@localhost etc]#
+
+
+4-->
+
+[root@localhost ~]# ps -eaf | grep httpd
+root     15775     1  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   15776 15775  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   15777 15775  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   15778 15775  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   15779 15775  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache   15780 15775  0 11:31 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+root     26964 26948  0 12:43 pts/1    00:00:00 grep --color=auto httpd
+[root@localhost ~]#
+
+
+5--> 
+
+
+http://10.76.141.30/index.html/
+
+6-->
+
+
+7--> 
+
+ ansible localhost -m yum -a "state=present name=git"
+localhost | CHANGED => {
+    "ansible_facts": {
+        "pkg_mgr": "yum"
+    },
+    "changed": true,
+    "changes": {
+        "installed": [
+            "git"
+        ]
+    },
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "Loaded plugins:
+
+
+b-> 
+
+[root@localhost ~]# which wget
+/usr/bin/wget
+[root@localhost ~]#
+
+
+
+8--> 
+
+
+[root@localhost etc]# ansible localhost -m git -a "clone=yes repo=https://github.com/scmgalaxy/ansible-role-template dest=/etc/bin/git"
+localhost | CHANGED => {
+    "after": "d3eefe03c1bb6c9b0e1574347523174a26d015ff",
+    "before": null,
+    "changed": true
+}
+[root@localhost etc]# ls
+
+
+9-->
+
+No applicable
+
+10 --> 
+
+
+[root@localhost ~]# ansible localhost -m file  -a "state=touch path=/opt/devopsschool.txt"
+localhost | CHANGED => {
+    "changed": true,
+    "dest": "/opt/devopsschool.txt",
+    "gid": 0,
+    "group": "root",
+    "mode": "0644",
+    "owner": "root",
+    "secontext": "unconfined_u:object_r:usr_t:s0",
+    "size": 0,
+    "state": "file",
+    "uid": 0
+}
+[root@localhost ~]# ansible localhost -m file  -a "state=absent  path=/opt/devopsschool.txt"
+localhost | CHANGED => {
+    "changed": true,
+    "path": "/opt/devopsschool.txt",
+    "state": "absent"
+}
+[root@localhost ~]# 
+
+
+
+4---
