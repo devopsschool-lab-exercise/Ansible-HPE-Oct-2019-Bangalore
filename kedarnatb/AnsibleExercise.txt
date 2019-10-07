@@ -1,0 +1,15 @@
+1. ansible localhost -m group -a "name=deploy"
+
+2. ansible localhost -m user -a "name=deploy-user group=deploy"
+
+3. ansible localhost -m service -a "name=httpd"
+
+4. ansible localhost -m service -a "state=started name=httpd"
+
+5. ansible localhost -m file -a "state=touch dest=/var/www/html/second.html"
+
+6. ansible localhost -m copy -a "src=/home/second dest=/var/www/html/second.html"
+
+7. ansible localhost -m package -a "state=present name=git"
+
+8. ansible localhost -m git -a "repo=https://github.com/scmgalaxy/ansible-role-template dest=/home"
