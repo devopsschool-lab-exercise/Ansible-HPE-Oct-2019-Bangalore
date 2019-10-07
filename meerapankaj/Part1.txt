@@ -1,0 +1,159 @@
+
+Example:
+
+ansible localhost -m yum -a "state=present name=httpd"
+ansible localhost -m service -a "state=started name=httpd"
+ansible localhost -m copy -a "src=index.html dest=/var/www/html/"
+ansible localhost -m file -a "state=touch dest=/var/www/html/rajesh.html"
+
+
+**************************************************************************
+Program 1 – Write a Ansible Adhoc Commands to create a group called “deploy
+
+psuedo code:
+
+Create a group called deploy - module -group
+
+ansible localhost -m group -a "name=deploy"
+
+
+[root@prmvm2 local]# ansible localhost -m group -a "name=deploy"
+ [WARNING]: No inventory was parsed, only implicit localhost is available
+
+localhost | CHANGED => {
+    "changed": true,
+    "gid": 1001,
+    "name": "deploy",
+    "state": "present",
+    "system": false
+}
+
+
+[root@prmvm2 local]# grep 'deploy' /etc/group
+deploy:x:1001:
+
+
+*************************************************************************************
+
+Program 2 – Write a Ansible Adhoc Commands to create a user called “deploy-user” which is part of group called “deploy” and with /bin/bash shell.
+
+psuedo code:
+1)Create a user --> user
+2)belongs to group deploy -->
+3)with /bin/bash sell -->
+
+ansible localhost -m user -a "name=deploy-user shell=/bin/bash groups=deploy append=yes"
+
+
+
+[root@prmvm2 local]# ansible localhost -m user -a "name=deploy-user shell=/bin/bash groups=deploy append=yes"
+ [WARNING]: No inventory was parsed, only implicit localhost is available
+
+localhost | CHANGED => {
+    "changed": true,
+    "comment": "",
+    "create_home": true,
+    "group": 100,
+    "groups": "deploy",
+    "home": "/home/deploy-user",
+    "name": "deploy-user",
+    "shell": "/bin/bash",
+    "state": "present",
+    "system": false,
+    "uid": 1001
+}
+
+
+
+***********************************************************************************
+
+Program 3: Write a Ansible Adhoc commands install package named “httpd” in RHEL/centos.
+
+ansible localhost -m yum -a "state=present name=httpd"
+
+[root@prmvm2 local]# whereis httpd
+httpd:[root@prmvm2 local]# ansible localhost -m yum -a "state=present name=httpd"
+[root@prmvm2 local]# whereis httpd
+httpd: /usr/sbin/httpd /usr/lib64/httpd /etc/httpd /usr/share/httpd /usr/share/man/man8/httpd.8.gz
+
+
+************************************************************************************
+
+Program 4:Write a Ansible Adhoc commands to start and enable the service named “httpd”
+
+
+ansible localhost -m service -a "state=started name=httpd"
+
+**********************************************************************************
+
+Program 5: Write a Ansible commands to create a file called “index.html” in /var/www/html with some dummy html contents.
+
+
+ansible localhost -m copy -a "src=index.html dest=/var/www/html/"
+
+
+*************************************************************************
+
+Program 6 – Write a Ansible commands to copy a file called “second.html” in /var/www/html/second.html with some dummy html contents.
+
+ansible localhost -m file -a "state=touch dest=/var/www/html/second.html"
+
+
+[root@prmvm2 local]# ansible localhost -m file -a "state=touch dest=/var/www/html/second.html"
+ [WARNING]: No inventory was parsed, only implicit localhost is available
+
+localhost | CHANGED => {
+    "changed": true,
+    "dest": "/var/www/html/second.html",
+    "gid": 0,
+    "group": "root",
+    "mode": "0644",
+    "owner": "root",
+    "size": 0,
+    "state": "file",
+    "uid": 0
+}
+
+
+**********************************************************************
+
+Program 7: Write a Ansible commands to install a package called “git”, “wget”.
+
+
+ansible localhost -m yum -a "state=present name=git"
+ansible localhost -m yum -a "state=present name=wget"
+
+
+[root@prmvm1 ~]# ansible localhost -m yum -a "state=present name=wget"
+localhost | SUCCESS => {
+    "ansible_facts": {
+        "pkg_mgr": "yum"
+    },
+    "changed": false,
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "wget-1.14-13.el7.x86_64 providing wget is already installed"
+    ]
+}
+
+
+**************************************************************************************
+
+Program 8 – Write a Ansible Adhoc commands to clone git repo. https://github.com/scmgalaxy/ansible-role-template.
+
+
+ansible localhost -m git -a "repo=https://github.com/scmgalaxy/ansible-role-template dest=/opt/hpsdp/meera"
+
+
+[root@prmvm2 local]# ansible localhost -m git -a "repo=https://github.com/scmgalaxy/ansible-role-template dest=/opt/hpsdp/meera"
+ [WARNING]: No inventory was parsed, only implicit localhost is available
+
+localhost | CHANGED => {
+    "after": "d3eefe03c1bb6c9b0e1574347523174a26d015ff",
+    "before": null,
+    "changed": true
+}
+
+
+**********************************************************************************888
