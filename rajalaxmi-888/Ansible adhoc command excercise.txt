@@ -1,0 +1,104 @@
+
+Program1: 
+command: ansible localhost -m group -a "name=deploy"
+
+verify: 
+[root@localhost opt]# more /etc/group | grep deploy
+deploy:x:1000:
+deploy-user:x:1001:
+
+Program2:
+command: ansible localhost -m user -a "name=deploy-user group=deploy shell=/bin/bash"
+
+Verify: 
+[root@localhost opt]# more /etc/passwd | grep deploy-user
+deploy-user:x:1000:1000::/home/deploy-user:/bin/bash
+
+Program3:
+command:ansible localhost -m yum -a "state=present name=httpd"
+
+Verify:
+[root@localhost opt]# which httpd
+/usr/sbin/httpd
+
+Program4:
+Command: ansible localhost -m service -a "state=started name=httpd"
+
+Verify:
+[root@localhost opt]# ps -eaf | grep httpd
+root      2148     1  0 06:24 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache    2149  2148  0 06:24 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache    2150  2148  0 06:24 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache    2151  2148  0 06:24 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache    2152  2148  0 06:24 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache    2153  2148  0 06:24 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+apache    2208  2148  0 06:26 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+root      2808  1716  0 07:13 pts/0    00:00:00 grep --color=auto httpd
+
+Program5: 
+Command: ansible localhost -m copy -a "src=index.html dest=/var/www/html/"
+
+Verify: IP-http://10.76.85.17/
+
+Program6:
+command:ansible localhost -m copy -a "src=index.html dest=/var/www/html/"
+
+Verify:
+http://10.76.85.17/rajalaxmi.html
+
+Program7:
+
+ansible localhost -m yum -a "state=present name=git"
+ansible localhost -m yum -a "state=present name=wget"
+
+Verify:
+[root@localhost opt]# which git
+/usr/bin/git
+[root@localhost opt]#
+[root@localhost opt]# which wget
+/usr/bin/wget
+
+Program8:
+command:ansible localhost -m git -a "clone=yes repo=https://github.com/scmgalaxy/ansible-role-template dest=/root/rajala"
+
+Verify:
+[root@localhost opt]# cd /root/rajala/
+[root@localhost rajala]# ls
+bennojoy.mysql  inventory  node.pem  rajesh.role1  README.md  site.retry  site.yaml
+[root@localhost rajala]#
+
+Program10:
+ansible localhost -m git -a "clone=yes repo=https://github.com/scmgalaxy/ansible-role-template dest=/root/rajala"
+ansible localhost -m file -a "state=absent path=/opt/devopsschool.txt"
+
+Verify:
+[root@localhost ~]# ansible localhost -m file -a "state=touch path=/opt/devopsschool.txt"
+localhost | CHANGED => {
+    "changed": true,
+    "dest": "/opt/devopsschool.txt",
+    "gid": 0,
+    "group": "root",
+    "mode": "0644",
+    "owner": "root",
+    "secontext": "unconfined_u:object_r:usr_t:s0",
+    "size": 0,
+    "state": "file",
+    "uid": 0
+}
+[root@localhost ~]#
+[root@localhost ~]# cd /opt/
+[root@localhost opt]# ls
+devopsschool.txt
+[root@localhost opt]#
+
+
+Deletion:
+[root@localhost ~]# ansible localhost -m file -a "state=absent path=/opt/devopsschool.txt"
+localhost | CHANGED => {
+    "changed": true,
+    "path": "/opt/devopsschool.txt",
+    "state": "absent"
+}
+[root@localhost ~]# cd /opt/
+[root@localhost opt]# ls
+[root@localhost opt]# history
