@@ -1,0 +1,13 @@
+ansible localhost -m group -a "name=deploy"
+
+ansible localhost -m user -a "name=shiva group=deploy"
+
+ansible localhost -m yum -a "name=httpd"
+
+ansible localhost -m service -a "state=started name=httpd"
+
+ansible localhost -m file -a "path=/var/tmp/"
+
+ansible localhost -m yum -a "name=git"
+
+ansible localhost -m file -a "state=touch dest=/var/tmp/index.html"
