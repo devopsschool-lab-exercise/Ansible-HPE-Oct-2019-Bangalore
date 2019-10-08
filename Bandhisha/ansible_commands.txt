@@ -1,6 +1,6 @@
 ansible localhost -m group -a "name=deploy"
 
-ansible localhost -m user -a "name=deploy_user group=deploy shel=/bin/bash"
+ansible localhost -m user -a "name=deploy_user group=deploy shell=/bin/bash"
 
 ansible localhost -m yum -a "state=present name=httpd"
 
