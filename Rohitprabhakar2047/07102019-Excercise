@@ -1,0 +1,15 @@
+
+
+export http_proxy=http://web-proxy.in.hpecorp.net:8080  
+
+ansible localhost -m group -a "name=Ansible_R_test"
+TO check: vim /etc/group	
+
+ansible localhost -m user -a "name=<User Name> group <Ansible_R_Test>"
+
+ansible localhost -m file -a "state=touch dest=<Path/File Name>"
+ansible localhost -m copy -a "src =<Path/File> dest=<Path/FileName>"
+
+ansible localhost -m package -a "name=wget"
+ansible localhost -m package -a "name=git"
+git clone https://github.com/scmgalaxy/ansible-role-template
