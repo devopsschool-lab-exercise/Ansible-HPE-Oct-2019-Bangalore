@@ -47,9 +47,14 @@
 10.76.84.208
 
 [web]
-10.76.80.141
-10.76.80.168
-10.76.84.208
+10.76.80.141 ansible_user=surendra ansible_become=yes
+10.76.80.168 ansible_user=surendra ansible_become=yes
+10.76.84.208 ansible_user=gamini ansible_become=yes
+
+[web:vars]
+myname="Surendra in Inventory"
+package="httpd"
+service="httpd"
 
 [gog:children]
 git
