@@ -1,0 +1,5 @@
+- hosts: gog
+  gather_facts: no
+  tasks:
+  - name: reboot the machine
+    reboot:
