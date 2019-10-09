@@ -1,0 +1,7 @@
+---
+- name: Reboot
+  hosts: git
+  tasks:
+  - name: Reboot Git Hosts
+    reboot:
+...
