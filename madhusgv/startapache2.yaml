@@ -1,0 +1,8 @@
+- hosts: gog
+  gather_facts: no
+  tasks:
+  - name: Start apache2
+    service:
+       name: apache2
+       state: started
+       enabled: true
