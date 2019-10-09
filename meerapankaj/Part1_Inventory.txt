@@ -1,0 +1,240 @@
+
+
+Program 8 – Write a Ansible Adhoc commands to clone git repo. https://github.com/scmgalaxy/ansible-role-template.
+With IP list
+
+[root@prmvm2 deploy-user]# ansible all -i 15.153.133.61,15.153.133.60 -m git -a "repo=https://github.com/scmgalaxy/ansible-role-template dest=/opt/hpsdp/meera" -u deploy-user -k -b
+SSH password:
+15.153.133.60 | SUCCESS => {
+    "after": "d3eefe03c1bb6c9b0e1574347523174a26d015ff",
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "before": "d3eefe03c1bb6c9b0e1574347523174a26d015ff",
+    "changed": false,
+    "remote_url_changed": false
+}
+15.153.133.61 | SUCCESS => {
+    "after": "d3eefe03c1bb6c9b0e1574347523174a26d015ff",
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "before": "d3eefe03c1bb6c9b0e1574347523174a26d015ff",
+    "changed": false,
+    "remote_url_changed": false
+}
+
+***************************************************************************************************************************************************
+
+Program 7: Write a Ansible commands to install a package called “git”
+With inventory  (file)
+
+[root@prmvm2 deploy-user]# cat inventory
+15.153.133.60
+15.153.133.61
+
+ansible all -i inventory -m yum -a "state=present name=git" -u deploy-user -k -b
+
+
+[root@prmvm2 deploy-user]# ansible all -i inventory -m yum -a "state=present name=git" -u deploy-user -k -b
+SSH password:
+15.153.133.61 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "git-1.8.3.1-20.el7.x86_64 providing git is already installed"
+    ]
+}
+15.153.133.60 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "git-1.8.3.1-6.el7_2.1.x86_64 providing git is already installed"
+    ]
+}
+
+
+*******************************************************************************************************
+
+Program 5: Write a Ansible commands to create a file called “index.html” in /var/www/html with some dummy html contents.
+
+[root@prmvm2 deploy-user]# cat inventory
+[db]
+15.153.133.60
+15.153.133.61
+
+[web]
+15.153.133.61
+4.4.4.4
+5.5.5.6
+
+[common]
+15.153.133.59
+
+[gog:children]
+db
+common
+
+
+ansible common -i inventory -m copy -a "src=index.html dest=/var/www/html/" -u deploy-user -k -b
+
+Note: Executed to connect to root:
+
+[root@prmvm2 deploy-user]# ansible common -i inventory -m copy -a "src=index.html dest=/var/www/html/" -u root -k
+SSH password:
+15.153.133.59 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,
+    "checksum": "7f547224164fa4fff33bb20e220bc5e59e503d41",
+    "dest": "/var/www/html/index.html",
+    "gid": 0,
+    "group": "root",
+    "md5sum": "e927630f863ba36fb68792b90f132848",
+    "mode": "0644",
+    "owner": "root",
+    "size": 11,
+    "src": "/root/.ansible/tmp/ansible-tmp-1570604164.43-230263486953205/source",
+    "state": "file",
+    "uid": 0
+}
+
+
+****************************************************************************
+
+Program 3: Write a Ansible Adhoc commands install package named “httpd” in RHEL/centos.
+Using two groups
+
+ansible db,web -i inventory -m yum -a "state=present name=httpd" -u deploy-user -k -b
+
+[root@prmvm2 deploy-user]# cat inventory
+[db]
+15.153.133.60
+5.5.5.6
+
+[web]
+15.153.133.61
+4.4.4.4
+
+[common]
+15.153.133.59
+
+[gog:children]
+db
+common
+
+
+[root@prmvm2 deploy-user]# ansible db,web -i inventory -m yum -a "state=present name=httpd" -u deploy-user -k -b
+SSH password:
+15.153.133.61 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "httpd-2.4.6-90.0.1.el7.x86_64 providing httpd is already installed"
+    ]
+}
+15.153.133.60 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "httpd-2.4.6-45.el7.x86_64 providing httpd is already installed"
+    ]
+}
+5.5.5.6 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: ssh: connect to host 5.5.5.6 port 22: Connection timed out",
+    "unreachable": true
+}
+4.4.4.4 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: ssh: connect to host 4.4.4.4 port 22: Connection timed out",
+    "unreachable": true
+}
+
+
+********************************************************************************
+Program 6 – Write a Ansible commands to copy a file called “second.html” in /var/www/html/second.html with some dummy html contents.
+With Group of group:
+
+
+ansible gog -i inventory -m file -a "state=touch dest=/var/www/html/second.html" -u deploy-user -k -b
+
+[root@prmvm2 deploy-user]# cat inventory
+[db]
+15.153.133.60
+5.5.5.6
+
+[web]
+15.153.133.61
+4.4.4.4
+
+[common]
+15.153.133.59
+
+[gog:children]
+db
+common
+
+
+
+[root@prmvm2 deploy-user]# ansible gog -i inventory -m file -a "state=touch dest=/var/www/html/second.html" -u root -k
+SSH password:
+15.153.133.60 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,
+    "dest": "/var/www/html/second.html",
+    "gid": 0,
+    "group": "root",
+    "mode": "0644",
+    "owner": "root",
+    "size": 0,
+    "state": "file",
+    "uid": 0
+}
+15.153.133.59 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,
+    "dest": "/var/www/html/second.html",
+    "gid": 0,
+    "group": "root",
+    "mode": "0644",
+    "owner": "root",
+    "size": 0,
+    "state": "file",
+    "uid": 0
+}
+5.5.5.6 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: ssh: connect to host 5.5.5.6 port 22: Connection timed out",
+    "unreachable": true
+}
+
+
+********************************************************************************************************************************************
+
+
+
+
+
+

@@ -97,6 +97,7 @@ ansible localhost -m copy -a "src=index.html dest=/var/www/html/"
 Program 6 – Write a Ansible commands to copy a file called “second.html” in /var/www/html/second.html with some dummy html contents.
 
 ansible localhost -m file -a "state=touch dest=/var/www/html/second.html"
+ansible localhost -m lineinfile -a "path=/var/www/html/index.html state=present line='Ansilble - Training'"
 
 
 [root@prmvm2 local]# ansible localhost -m file -a "state=touch dest=/var/www/html/second.html"
