@@ -7,4 +7,6 @@ ansible localhost -m file -a "path=/var/www/html src=index.html"
 ansible localhost -m yum -a "name=git state=present"
 ansible localhost -m yum -a "name=wget state=present"
 
-ansible localhost -m git -a "repo=https://github.com/scmgalaxy/ansible-role-template dest=https://github.com/devopsschool-lab-exercise/Ansible-HPE-Oct-2019-Bangalore/tree/master/ankan27"
+
+ansible localhost -m git -a "repo=https://github.com/scmgalaxy/ansible-role-template dest=/tmp/clone_ank clone=yes separate_git_dir
+=/tmp/ankan"
