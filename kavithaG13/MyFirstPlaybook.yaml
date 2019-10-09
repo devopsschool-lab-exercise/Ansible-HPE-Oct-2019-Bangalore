@@ -13,4 +13,12 @@
     file: dest=/opt/test.txt state=touch
   - name: copy a file
     copy: dest=/var/www/html/ src="/root/kavitha/index.html"
+  - name: reboot the machine
+    reboot: msg="Reboot initiated by Ansible"
+  - name: Install Git
+    yum: name=git
+  - name: Install Wget
+    yum: name=wget
+  - name: Clone
+    git: repo=https://github.com/scmgalaxy/ansible-role-template dest=/root/kavitha/scmgalaxy
 ...
