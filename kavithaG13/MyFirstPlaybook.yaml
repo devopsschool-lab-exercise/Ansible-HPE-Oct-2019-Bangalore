@@ -20,5 +20,5 @@
   - name: Install Wget
     yum: name=wget
   - name: Clone
-    git: repo=https://github.com/scmgalaxy/ansible-role-template dest=/root/kavitha/scmgalaxy
+    git: repo=https://github.com/devopsschool-lab-exercise/Ansible-HPE-Oct-2019-Bangalore dest=devopsschool
 ...
