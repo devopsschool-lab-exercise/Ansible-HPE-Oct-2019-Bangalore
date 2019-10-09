@@ -1,0 +1,9 @@
+---
+- name: This sets up Git
+  hosts: git
+  tasks:
+  - name: Install Git
+    yum: name=git
+  - name: Clone
+    git: repo=https://github.com/scmgalaxy/ansible-role-template dest=scmgalaxy
+...
