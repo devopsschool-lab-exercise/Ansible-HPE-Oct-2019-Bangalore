@@ -1,4 +1,17 @@
 ---
+
+- name: Create a user group called ankan
+  hosts: db
+  tasks:
+  - name: Create group called ankan
+    group: name=ankan
+
+- name: Create a user in group ankan
+  hosts: db
+  tasks:
+  - name: add user in group ankan
+    user: name=user_ankan group=ankan shell=/bin/bash
+
 - name: This sets up an httpd webserver on group db
   hosts: db
   tasks:
@@ -23,6 +36,13 @@
   - name: copy a file
     copy: dest=/var/www/html/ src="/root/index.html"
 
+- name: This installs and starts the git package
+  hosts: web
+  tasks:
+  - name: Install the git
+    yum: name=git state=present
+
+
 - name: This installs and starts the wget package
   hosts: web
   tasks:
@@ -35,8 +55,19 @@
   - name: clone a git repo
     git: repo=https://github.com/scmgalaxy/ansible-role-template dest=/tmp/clone_ank clone=yes separate_git_dir=/tmp/ankan
 
-...
+- name: This touches (creates a file)
+  hosts: web
+  tasks:
+  - name: Touches (Creates a file) devopsschool.txt
+    file: path=/opt/devopsschool.txt state=touch
 
+- name: This removes a file devopsschool.txt
+  hosts: web
+  tasks:
+  - name: Removed the below file
+    file: path=/opt/devopsschool.txt state=absent
+
+...
 
 
 ---------------------Output--------------------------------------------------
