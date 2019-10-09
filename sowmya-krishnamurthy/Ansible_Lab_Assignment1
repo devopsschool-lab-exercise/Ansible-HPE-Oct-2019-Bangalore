@@ -1,0 +1,293 @@
+-------------------------------------------------------------------------------------------------------
+Program 1 – Write a Ansible Adhoc Commands to create a group called “deploy
+-------------------------------------------------------------------------------------------------------
+	
+	[root@localhost ~]# ansible localhost -m group  -a "state=present name=deploy"
+	localhost | CHANGED => {
+		"changed": true,
+		"gid": 1000,
+		"name": "deploy",
+		"state": "present",
+		"system": false
+	}
+	[root@localhost ~]# more /etc/group |grep deploy
+	deploy:x:1000:
+
+-------------------------------------------------------------------------------------------------------	
+Program 2 – Write a Ansible Adhoc Commands to create a user called “deploy-user” which is part of group called “deploy” and with /bin/bash shell.
+-------------------------------------------------------------------------------------------------------
+
+	[root@localhost ~]# ansible localhost  -m user -a "name=deploy-user group=deploy shell=/bin/bash"
+	localhost | CHANGED => {
+		"changed": true,
+		"comment": "",
+		"create_home": true,
+		"group": 1000,
+		"home": "/home/deploy-user",
+		"name": "deploy-user",
+		"shell": "/bin/bash",
+		"state": "present",
+		"system": false,
+		"uid": 1000
+	}
+	[root@localhost ~]# more /etc/passwd | grep deploy-user
+	deploy-user:x:1000:1000::/home/deploy-user:/bin/bash
+
+-------------------------------------------------------------------------------------------------------
+Program 3 – Write a Ansible Adhoc commands install package named “httpd” in RHEL/centos.
+-------------------------------------------------------------------------------------------------------
+
+	[root@localhost ~]# which https
+	/usr/bin/which: no https in (/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin)
+
+	[root@localhost ~]# ansible localhost  -m yum -a "state=present name=httpd"
+	localhost | CHANGED => {
+		"ansible_facts": {
+			"pkg_mgr": "yum"
+		},
+		"changed": true,
+		"changes": {
+			"installed": [
+				"httpd"
+			]
+		},
+		"msg": "",
+		"rc": 0,
+		"results": [
+			"Loaded plugins: fastestmirror\nLoading mirror speeds from cached hostfile\n * base: centos.excellmedia.net\n * epel: mirror01.idc.hinet.net\n * extras: centos.excellmedia.net\n * updates: centos.excellmedia.net\nResolving Dependencies\n--> Running transaction check\n---> Package httpd.x86_64 0:2.4.6-90.el7.centos will be installed\n--> Processing Dependency: httpd-tools = 2.4.6-90.el7.centos for package: httpd-2.4.6-90.el7.centos.x86_64\n--> Processing Dependency: /etc/mime.types for package: httpd-2.4.6-90.el7.centos.x86_64\n--> Processing Dependency: libaprutil-1.so.0()(64bit) for package: httpd-2.4.6-90.el7.centos.x86_64\n--> Processing Dependency: libapr-1.so.0()(64bit) for package: httpd-2.4.6-90.el7.centos.x86_64\n--> Running transaction check\n---> Package apr.x86_64 0:1.4.8-5.el7 will be installed\n---> Package apr-util.x86_64 0:1.5.2-6.el7 will be installed\n---> Package httpd-tools.x86_64 0:2.4.6-90.el7.centos will be installed\n---> Package mailcap.noarch 0:2.1.41-2.el7 will be installed\n--> Finished Dependency Resolution\n\nDependencies Resolved\n\n================================================================================\n Package            Arch          Version                     Repository   Size\n================================================================================\nInstalling:\n httpd              x86_64        2.4.6-90.el7.centos         base        2.7 M\nInstalling for dependencies:\n apr                x86_64        1.4.8-5.el7                 base        103 k\n apr-util           x86_64        1.5.2-6.el7                 base         92 k\n httpd-tools        x86_64        2.4.6-90.el7.centos         base         91 k\n mailcap            noarch        2.1.41-2.el7                base         31 k\n\nTransaction Summary\n================================================================================\nInstall  1 Package (+4 Dependent packages)\n\nTotal download size: 3.0 M\nInstalled size: 10 M\nDownloading packages:\n--------------------------------------------------------------------------------\nTotal                                              1.3 MB/s | 3.0 MB  00:02     \nRunning transaction check\nRunning transaction test\nTransaction test succeeded\nRunning transaction\n  Installing : apr-1.4.8-5.el7.x86_64                                       1/5 \n  Installing : apr-util-1.5.2-6.el7.x86_64                                  2/5 \n  Installing : httpd-tools-2.4.6-90.el7.centos.x86_64                       3/5 \n  Installing : mailcap-2.1.41-2.el7.noarch                                  4/5 \n  Installing : httpd-2.4.6-90.el7.centos.x86_64                             5/5 \n  Verifying  : apr-1.4.8-5.el7.x86_64                                       1/5 \n  Verifying  : mailcap-2.1.41-2.el7.noarch                                  2/5 \n  Verifying  : httpd-tools-2.4.6-90.el7.centos.x86_64                       3/5 \n  Verifying  : apr-util-1.5.2-6.el7.x86_64                                  4/5 \n  Verifying  : httpd-2.4.6-90.el7.centos.x86_64                             5/5 \n\nInstalled:\n  httpd.x86_64 0:2.4.6-90.el7.centos                                            \n\nDependency Installed:\n  apr.x86_64 0:1.4.8-5.el7                     apr-util.x86_64 0:1.5.2-6.el7    \n  httpd-tools.x86_64 0:2.4.6-90.el7.centos     mailcap.noarch 0:2.1.41-2.el7    \n\nComplete!\n"
+		]
+	}
+	[root@localhost ~]# which httpd
+	/usr/sbin/httpd
+-------------------------------------------------------------------------------------------------------
+Program 4 – Write a Ansible Adhoc commands to start and enable the service named “httpd”
+-------------------------------------------------------------------------------------------------------
+	[root@localhost ~]# ps -ef |grep httpd
+	root      9781  9525  0 13:20 pts/0    00:00:00 grep --color=auto httpd
+	[root@localhost ~]# ansible localhost -m service -a "state=started name=httpd"
+	localhost | CHANGED => {
+		"changed": true,
+		"name": "httpd",
+		"state": "started",
+		"status": {
+			"ActiveEnterTimestampMonotonic": "0",
+			"ActiveExitTimestampMonotonic": "0",
+			"ActiveState": "inactive",
+			"After": "basic.target -.mount network.target nss-lookup.target remote-fs.target systemd-journald.socket system.slice tmp.mount",
+			"AllowIsolate": "no",
+			"AmbientCapabilities": "0",
+			"AssertResult": "no",
+			"AssertTimestampMonotonic": "0",
+			"Before": "shutdown.target",
+			"BlockIOAccounting": "no",
+			"BlockIOWeight": "18446744073709551615",
+			"CPUAccounting": "no",
+			"CPUQuotaPerSecUSec": "infinity",
+			"CPUSchedulingPolicy": "0",
+			"CPUSchedulingPriority": "0",
+			"CPUSchedulingResetOnFork": "no",
+			"CPUShares": "18446744073709551615",
+			"CanIsolate": "no",
+			"CanReload": "yes",
+			"CanStart": "yes",
+			"CanStop": "yes",
+			"CapabilityBoundingSet": "18446744073709551615",
+			"ConditionResult": "no",
+			"ConditionTimestampMonotonic": "0",
+			"Conflicts": "shutdown.target",
+			"ControlPID": "0",
+			"DefaultDependencies": "yes",
+			"Delegate": "no",
+			"Description": "The Apache HTTP Server",
+			"DevicePolicy": "auto",
+			"Documentation": "man:httpd(8) man:apachectl(8)",
+			"EnvironmentFile": "/etc/sysconfig/httpd (ignore_errors=no)",
+			"ExecMainCode": "0",
+			"ExecMainExitTimestampMonotonic": "0",
+			"ExecMainPID": "0",
+			"ExecMainStartTimestampMonotonic": "0",
+			"ExecMainStatus": "0",
+			"ExecReload": "{ path=/usr/sbin/httpd ; argv[]=/usr/sbin/httpd $OPTIONS -k graceful ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",
+			"ExecStart": "{ path=/usr/sbin/httpd ; argv[]=/usr/sbin/httpd $OPTIONS -DFOREGROUND ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",
+			"ExecStop": "{ path=/bin/kill ; argv[]=/bin/kill -WINCH ${MAINPID} ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }",
+			"FailureAction": "none",
+			"FileDescriptorStoreMax": "0",
+			"FragmentPath": "/usr/lib/systemd/system/httpd.service",
+			"GuessMainPID": "yes",
+			"IOScheduling": "0",
+			"Id": "httpd.service",
+			"IgnoreOnIsolate": "no",
+			"IgnoreOnSnapshot": "no",
+			"IgnoreSIGPIPE": "yes",
+			"InactiveEnterTimestampMonotonic": "0",
+			"InactiveExitTimestampMonotonic": "0",
+			"JobTimeoutAction": "none",
+			"JobTimeoutUSec": "0",
+			"KillMode": "control-group",
+			"KillSignal": "18",
+			"LimitAS": "18446744073709551615",
+			"LimitCORE": "18446744073709551615",
+			"LimitCPU": "18446744073709551615",
+			"LimitDATA": "18446744073709551615",
+			"LimitFSIZE": "18446744073709551615",
+			"LimitLOCKS": "18446744073709551615",
+			"LimitMEMLOCK": "65536",
+			"LimitMSGQUEUE": "819200",
+			"LimitNICE": "0",
+			"LimitNOFILE": "4096",
+			"LimitNPROC": "7260",
+			"LimitRSS": "18446744073709551615",
+			"LimitRTPRIO": "0",
+			"LimitRTTIME": "18446744073709551615",
+			"LimitSIGPENDING": "7260",
+			"LimitSTACK": "18446744073709551615",
+			"LoadState": "loaded",
+			"MainPID": "0",
+			"MemoryAccounting": "no",
+			"MemoryCurrent": "18446744073709551615",
+			"MemoryLimit": "18446744073709551615",
+			"MountFlags": "0",
+			"Names": "httpd.service",
+			"NeedDaemonReload": "no",
+			"Nice": "0",
+			"NoNewPrivileges": "no",
+			"NonBlocking": "no",
+			"NotifyAccess": "main",
+			"OOMScoreAdjust": "0",
+			"OnFailureJobMode": "replace",
+			"PermissionsStartOnly": "no",
+			"PrivateDevices": "no",
+			"PrivateNetwork": "no",
+			"PrivateTmp": "yes",
+			"ProtectHome": "no",
+			"ProtectSystem": "no",
+			"RefuseManualStart": "no",
+			"RefuseManualStop": "no",
+			"RemainAfterExit": "no",
+			"Requires": "basic.target -.mount system.slice",
+			"RequiresMountsFor": "/var/tmp",
+			"Restart": "no",
+			"RestartUSec": "100ms",
+			"Result": "success",
+			"RootDirectoryStartOnly": "no",
+			"RuntimeDirectoryMode": "0755",
+			"SameProcessGroup": "no",
+			"SecureBits": "0",
+			"SendSIGHUP": "no",
+			"SendSIGKILL": "yes",
+			"Slice": "system.slice",
+			"StandardError": "inherit",
+			"StandardInput": "null",
+			"StandardOutput": "journal",
+			"StartLimitAction": "none",
+			"StartLimitBurst": "5",
+			"StartLimitInterval": "10000000",
+			"StartupBlockIOWeight": "18446744073709551615",
+			"StartupCPUShares": "18446744073709551615",
+			"StatusErrno": "0",
+			"StopWhenUnneeded": "no",
+			"SubState": "dead",
+			"SyslogLevelPrefix": "yes",
+			"SyslogPriority": "30",
+			"SystemCallErrorNumber": "0",
+			"TTYReset": "no",
+			"TTYVHangup": "no",
+			"TTYVTDisallocate": "no",
+			"TasksAccounting": "no",
+			"TasksCurrent": "18446744073709551615",
+			"TasksMax": "18446744073709551615",
+			"TimeoutStartUSec": "1min 30s",
+			"TimeoutStopUSec": "1min 30s",
+			"TimerSlackNSec": "50000",
+			"Transient": "no",
+			"Type": "notify",
+			"UMask": "0022",
+			"UnitFilePreset": "disabled",
+			"UnitFileState": "disabled",
+			"WatchdogTimestampMonotonic": "0",
+			"WatchdogUSec": "0"
+		}
+	}
+	[root@localhost ~]# ps -ef |grep httpd
+	root      9820     1  0 13:20 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+	apache    9821  9820  0 13:20 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+	apache    9822  9820  0 13:20 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+	apache    9823  9820  0 13:20 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+	apache    9824  9820  0 13:20 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+	apache    9825  9820  0 13:20 ?        00:00:00 /usr/sbin/httpd -DFOREGROUND
+	root      9833  9525  0 13:20 pts/0    00:00:00 grep --color=auto httpd
+
+-------------------------------------------------------------------------------------------------------------
+Program 5 – Write a Ansible commands to create a file called “index.html” in /var/www/html with some dummy html contents.
+-------------------------------------------------------------------------------------------------------------
+	How to verify?
+	Browse http://x.x.x.x:80
+	
+
+-------------------------------------------------------------------------------------------------------------
+Program 6 – Write a Ansible commands to copy a file called “second.html” in /var/www/html/second.html with some dummy html contents.
+-------------------------------------------------------------------------------------------------------------
+	How to verify?
+	Browse http://x.x.x.x/second.html
+
+-------------------------------------------------------------------------------------------------------------
+Program 7 – Write a Ansible commands to install a package called “git”, “wget”.
+-------------------------------------------------------------------------------------------------------------
+	[root@localhost ~]# which git
+	/usr/bin/which: no git in (/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin)
+	ansible localhost -m yum -a "state=present name=git"
+	ansible localhost -m yum -a "state=present name=wget
+
+	[root@localhost ~]# which wget
+	/usr/bin/wget
+
+	[root@localhost ~]# which git
+	/usr/bin/git
+
+-------------------------------------------------------------------------------------------------------------
+Program 8 – Write a Ansible Adhoc commands to clone git repo. https://github.com/scmgalaxy/ansible-role-template.
+-------------------------------------------------------------------------------------------------------------
+	[root@localhost tmp]# ansible localhost -m git -a "clone=yes repo=https://github.com/scmgalaxy/ansible-role-template dest=/sowmya"
+	localhost | CHANGED => {
+		"after": "d3eefe03c1bb6c9b0e1574347523174a26d015ff",
+		"before": null,
+		"changed": true
+	}
+	[root@localhost tmp]# ls /sowmya/
+	bennojoy.mysql/ .git/           inventory       node.pem        rajesh.role1/   README.md       site.retry      site.yaml
+	[root@localhost tmp]# ls /sowmya/
+	bennojoy.mysql  inventory  node.pem  rajesh.role1  README.md  site.retry  site.yaml
+
+-------------------------------------------------------------------------------------------------------------
+Program 9 – Write a Ansible commands to reboot a self machine.
+-------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------
+Program 10 – Write a Ansible commands to touch a file called “devopsschool.txt” in /opt/ and delete after using ansible adhoc command.
+-------------------------------------------------------------------------------------------------------------
+
+	[root@localhost opt]# ls -l /opt/dev*
+	ls: cannot access /opt/dev*: No such file or directory
+	[root@localhost opt]# ansible localhost -m file -a "state=touch path=/opt/devopsschool.txt"
+	localhost | CHANGED => {
+		"changed": true,
+		"dest": "/opt/devopsschool.txt",
+		"gid": 0,
+		"group": "root",
+		"mode": "0644",
+		"owner": "root",
+		"secontext": "unconfined_u:object_r:usr_t:s0",
+		"size": 0,
+		"state": "file",
+		"uid": 0
+	}
+	[root@localhost opt]# ls -l /opt/dev*
+	-rw-r--r--. 1 root root 0 Oct  8 13:29 /opt/devopsschool.txt
+	[root@localhost opt]# ansible localhost -m file -a "state=absent path=/opt/devopsschool.txt"
+	localhost | CHANGED => {
+		"changed": true,
+		"path": "/opt/devopsschool.txt",
+		"state": "absent"
+	}
+	[root@localhost opt]# ls -l /opt/dev*
+	ls: cannot access /opt/dev*: No such file or directory

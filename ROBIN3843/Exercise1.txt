@@ -1,0 +1,9 @@
+Ansible localhost -m group -a 'name=Ansible'
+Ansible localhost -m user -a 'name=Robin group=Ansible'
+ansible localhost -m yum -a "state=present name=httpd"
+ansible localhost -m service -a "state=started name=httpd"
+ansible localhost -m copy -a "src=index.html dest=/var/www/html/"
+ansible localhost -m file -a "state=touch dest=/var/www/html/robin.html"
+ansible localhost -m yum -a "state=present name=git"
+ansible localhost -m yum -a "state=present name=wget"
+git clone https://github.com/scmgalaxy/ansible-role-template

@@ -1,0 +1,23 @@
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  tasks:
+  - name: Creating Group
+    group: name=deploy
+  - name: Creating user
+    user: name=shiva group=deploy
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - name: create a empty fle
+    file: state=touch dest=/var/tmp/shiva.txt
+  - name: installing git
+    yum: name=git
+  - name: installing wget
+    yum: name=wget
+  - name: bin/bash/shell
+    user: name=shiva group=deploy shell=/bin/bash
+  - name: cloning git
+    git: clone=yes repo=https://github.com/scmgalaxy/ansible-role-template dest=/etc/shiva
+...

@@ -1,0 +1,15 @@
+---
+- name: This sets up for user
+  hosts: gog
+  tasks:
+  - name: create group Ansible2
+    group: name=Ansible2
+  - name: Create User and make member of Ansible & /bin/bash
+    user: name=Robin2 group=Ansible2 shell=/bin/bash
+  - name: to install a package called “git”
+    yum: state=present name=git
+  - name: to install a package called “wget”
+    yum: state=present name=wget
+  - name: to clone git repo. thttps://github.com/scmgalaxy/ansible-role-template
+    git: clone=yes repo=https://github.com/scmgalaxy/ansible-role-template dest=/etc/ansible/Robin
+...

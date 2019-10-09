@@ -1,0 +1,38 @@
+---
+- name: This sets up an httpd webserver on group db
+  hosts: db
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+
+- name: This sets up an httpd webserver on group web
+  hosts: web
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+
+- name: This installs and starts the wget package
+  hosts: web
+  tasks:
+  - name: Install the wget
+    yum: name=wget state=present
+
+- name: This clones a git repo
+  hosts: web
+  tasks:
+  - name: clone a git repo
+    git: repo=https://github.com/scmgalaxy/ansible-role-template dest=/tmp/clone_ank clone=yes separate_git_dir=/tmp/ankan
+
+...
