@@ -1,0 +1,25 @@
+
+- name: This sets is to create a lab assignmnet in yaml
+  hosts: db
+  tasks:
+  - name: create a group
+    group: name=dev_group1
+  - name: create a user of  dev_group1
+    user : name=dev_user1 group=dev_group1 shell=/bin/bash
+  - name: Install the wget
+    yum: name=wget
+  - name: Install the git
+    yum: name=git
+  - name: Create a directory if it does not exist
+    file:
+      path: /root/sowmya
+      state: directory
+      mode: '0755'
+  - name: Create a directory if it does not exist
+    git:
+      repo: https://github.com/scmgalaxy/ansible-role-template
+      dest: /root/sowmya
+  - name: create a file
+    file: name=/opt/devops.txt state=touch
+  - name: delete a file
+    file: name=/opt/devops.txt state=absent
