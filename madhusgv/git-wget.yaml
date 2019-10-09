@@ -1,0 +1,11 @@
+- hosts: gog
+  gather_facts: no
+  tasks:
+  - name: install git
+    apt:
+       name: git
+       state: present
+  - name: install wget
+    apt:
+       name: wget
+       state: present

@@ -1,0 +1,8 @@
+- hosts: gog
+  gather_facts: no
+  tasks:
+  - name: clone git repo
+    git:
+       clone: yes
+       dest: /home/madhu
+       repo: https://github.com/scmgalaxy/ansible-role-template

@@ -1,0 +1,22 @@
+---
+
+- name: This sets up an httpd webserver
+  hosts: one
+  tasks:
+  - name: Create a group name
+    group: name=deploy
+  - name: Create a user name
+    user: name=dummy-user group=deploy shell=/bin/bash 
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - name: copy a file
+    copy: src=index.html dest=/var/www/html/	
+  - name: Install git apps
+    yum: state=present name=git
+  - name: Install wget apps
+    yum: state=present name=wget
+  - name: clone a git repo
+    git: clone=yes repo=https://github.com/scmgalaxy/ansible-role-template dest=/root/rajala
+...

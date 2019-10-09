@@ -1,0 +1,7 @@
+---
+- name: MY Create USER playbook
+  hosts: db
+  tasks:
+  - name: Create USER
+    user: name=deploy-user group=deploy shell=/bin/bash
+...

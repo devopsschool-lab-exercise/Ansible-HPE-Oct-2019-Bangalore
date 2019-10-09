@@ -1,0 +1,255 @@
+Example:
+
+
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+...
+
+*************************************************************************************************************
+
+
+1. Write a Ansible Playbook to create a group called “deploy”
+
+---
+- name: Create a group deploy
+  hosts: db
+  tasks:
+  - name: create a group deploy
+    group: name=deploy
+...
+
+output:
+[root@prmvm2 deploy-user]# ansible-playbook -i inventory example1.yaml
+
+PLAY [Create a group deploy] ********************************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [create a group deploy] ********************************************************************************************************************************
+changed: [15.153.133.59]
+ok: [15.153.133.60]
+
+PLAY RECAP **************************************************************************************************************************************************
+15.153.133.59              : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+15.153.133.60              : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+****************************************************************************************************************************************
+2.Write a Ansible Playbook to create a user called “deploy-user” which is part of group called “deploy” and with /bin/bash shell.
+
+
+---
+- name: create a user deploy-user and assign it to group deploy
+  hosts: db
+  tasks:
+  - name: create a group deploy
+    user: name=deploy-user shell=/bin/bash groups=deploy append=yes
+...
+
+
+output:
+
+[root@prmvm2 deploy-user]# ansible-playbook -i inventory example2.yaml
+
+PLAY [create a user deploy-user and assign it to group deploy] **********************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+TASK [create a group deploy] ********************************************************************************************************************************
+changed: [15.153.133.59]
+ok: [15.153.133.60]
+
+PLAY RECAP **************************************************************************************************************************************************
+15.153.133.59              : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+15.153.133.60              : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+*********************************************************************************************************************************
+
+3.Write a Ansible Playbook to install package named “httpd” in RHEL/centos.
+4.Write a Ansible Playbook to start and enable the service named “httpd”
+
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+...
+
+
+[root@prmvm2 deploy-user]# ansible-playbook -i inventory  example3_4.yaml
+
+PLAY [This sets up an httpd webserver] **********************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [Install the httpd apps] *******************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+TASK [start the httpd service] ******************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+PLAY RECAP **************************************************************************************************************************************************
+15.153.133.59              : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+15.153.133.60              : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+
+*********************************************************************************************************************************************
+
+5. Write a Ansible Playbook to create a file called “index.html” in /var/www/html with some dummy html contents.
+
+
+---
+- name: To create a dummy html content
+  hosts: db
+  tasks:
+  - name: create a empty fle
+    file: state=touch dest=/var/www/html/second.html
+  - name: write into the file
+	lineinfile: path=/var/www/html/index.html state=present line='Ansilble - Training'
+...
+
+output:
+[root@prmvm2 deploy-user]#  ansible-playbook -i inventory example5.yaml
+
+PLAY [To create a dummy html content] ***********************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [create a empty fle] ***********************************************************************************************************************************
+changed: [15.153.133.59]
+changed: [15.153.133.60]
+
+TASK [write into the file] **********************************************************************************************************************************
+changed: [15.153.133.59]
+changed: [15.153.133.60]
+
+PLAY RECAP **************************************************************************************************************************************************
+15.153.133.59              : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+15.153.133.60              : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+************************************************************************************************************************************
+6.Write a Ansible Playbook to reboot a self machine.
+
+
+---
+- name: To create a dummy html content
+  hosts: db
+  tasks:
+  - name: Unconditionally reboot the machine with all defaults
+    reboot:
+...
+
+**********************************************************************************************************
+
+7.Write a Ansible Playbook to install a package called “git”, “wget”.
+
+
+---
+- name: Install package git and wget
+  hosts: db
+  tasks:
+  - name: install git
+    yum: state=present name=git
+  - name: install wget
+	yum: state=present name=wget
+...
+
+
+output:
+[root@prmvm2 deploy-user]# ansible-playbook -i inventory example7.yaml
+
+PLAY [Install package git and wget] *************************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [install git] ******************************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+TASK [install wget] *****************************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+PLAY RECAP **************************************************************************************************************************************************
+15.153.133.59              : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+15.153.133.60              : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+****************************************************************************************
+8.Write a Ansible Playbook to clone git repo. thttps://github.com/scmgalaxy/ansible-role-template
+
+---
+- name: Clone git
+  hosts: web
+  tasks:
+  - name: clone git repo
+    git: repo=https://github.com/scmgalaxy/ansible-role-template dest=/opt/hpsdp/meera
+...
+
+
+[root@prmvm2 deploy-user]# ansible-playbook -i inventory  example8.yaml
+
+PLAY [clone git] ********************************************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [15.153.133.61]
+
+TASK [clone git repo] ***************************************************************************************************************************************
+ok: [15.153.133.61]
+
+PLAY RECAP **************************************************************************************************************************************************
+15.153.133.61              : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+*********************************************************************************************
+9.Now Merge all Top Playbook into one and run and verify
+
+---
+- name: Create a group deploy
+  hosts: db
+  tasks:
+  - name: create a group deploy
+    group: name=deploy
+...
+---
+- name: create a user deploy-user and assign it to group deploy
+  hosts: db
+  tasks:
+  - name: create a group deploy
+    user: name=deploy-user shell=/bin/bash groups=deploy append=yes
+...
+
+*
+
+

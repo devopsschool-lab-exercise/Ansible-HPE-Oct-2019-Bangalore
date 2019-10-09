@@ -1,0 +1,9 @@
+[db]
+15.213.94.145
+
+[webservers]
+15.213.94.147
+
+[gog:children]
+db
+webservers

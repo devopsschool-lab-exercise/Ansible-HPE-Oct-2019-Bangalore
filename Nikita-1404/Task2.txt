@@ -1,0 +1,21 @@
+---
+- name: This sets to create deploye
+  hosts: db
+  tasks:
+  - name: create a group called deploy
+    group: name=deploy
+  - name: create user call deploy-user1
+    user: name=deploy-user1 group=deploy shell=/bin/bash
+  - name: start the httpd service
+    service: name=httpd state=started
+  - name: start the httpd enabled
+    service: name=httpd
+  - name: install  git
+    yum: state=present name=git
+  - name: copy a file
+    copy: src=index.html dest=/root/index.html
+  - name: install  wget
+    yum: state=present name=wget
+  - name: clone git repo
+    git: clone=yes repo=https://github.com/scmgalaxy/ansible-role-template dest=/etc/bin/git
+...

@@ -1,0 +1,104 @@
+Program 1 – Write a Ansible Adhoc Commands to create a group called “deploy
+	- ansible db -i inventory -m group -a "name=deploy" -u root -k
+SSH password:
+[DEPRECATION WARNING]: Distribution Ubuntu 16.04 on host 15.213.94.147 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior Ansible releases. A
+future Ansible release will default to using the discovered platform python for this host. See https://docs.ansible.com/ansible/2.8/reference_appendices/interpreter_discovery.html for more
+ information. This feature will be removed in version 2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+15.213.94.147 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "gid": 1001,
+    "name": "deploy",
+    "state": "present",
+    "system": false
+}
+root@master:~#
+
+
+Program 2 – Write a Ansible Adhoc Commands to create a user called “deploy-user” which is part of group called “deploy” and with /bin/bash shell.
+root@master:~# ansible all -i 15.213.94.147, -m user -a "name=deploy-user group=deploy" -u root -k
+SSH password:
+[DEPRECATION WARNING]: Distribution Ubuntu 16.04 on host 15.213.94.147 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior Ansible releases. A
+future Ansible release will default to using the discovered platform python for this host. See https://docs.ansible.com/ansible/2.8/reference_appendices/interpreter_discovery.html for more
+ information. This feature will be removed in version 2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+15.213.94.147 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "append": false,
+    "changed": false,
+    "comment": "",
+    "group": 1001,
+    "home": "/home/deploy-user",
+    "move_home": false,
+    "name": "deploy-user",
+    "shell": "",
+    "state": "present",
+    "uid": 1001
+}
+root@master:~#
+
+	
+Program 3 – Write a Ansible Adhoc commands install package named “httpd” in RHEL/centos/Ubuntu.
+root@master:~# ansible all -i 15.213.94.147, -m apt -a "state=present name=apache2" -u deploy-user -k -b
+SSH password:
+ [WARNING]: Updating cache and auto-installing missing dependency: python-apt
+
+ [WARNING]: Could not find aptitude. Using apt-get instead
+
+[DEPRECATION WARNING]: Distribution Ubuntu 16.04 on host 15.213.94.147 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior Ansible releases. A
+future Ansible release will default to using the discovered platform python for this host. See https://docs.ansible.com/ansible/2.8/reference_appendices/interpreter_discovery.html for more
+ information. This feature will be removed in version 2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+15.213.94.147 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "cache_update_time": 1570599071,
+    "cache_updated": false,
+    "changed": false
+}
+root@master:~# 
+
+Program 4 – Write a Ansible Adhoc commands to start and enable the service named “httpd”
+
+ansible all -i 15.213.94.147, -m service -a "name=apache2 state=started enabled=true" -u deploy-user -k -b
+SSH password:
+[DEPRECATION WARNING]: Distribution Ubuntu 16.04 on host 15.213.94.147 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior Ansible releases. A
+future Ansible release will default to using the discovered platform python for this host. See https://docs.ansible.com/ansible/2.8/reference_appendices/interpreter_discovery.html for more
+ information. This feature will be removed in version 2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+15.213.94.147 | SUCCESS => {
+
+
+Program 5 – Write a Ansible commands to create a file called “index.html” in /var/www/html with some dummy html contents.
+	- ansible all -i 15.213.94.147, -m file -a "path=/var/www/html/index.html state=touch" -u deploy-user -k -b
+	
+	- ansible all -i 15.213.94.147, -m lineinfile -a "path=/var/www/html/index.html state=present line='My Web Page'" -u deploy-user -k -b
+		
+	- http://15.213.94.147/index.html
+	
+Program 6 – Write a Ansible commands to copy a file called “second.html” in /var/www/html/second.html with some dummy html contents.
+	- ansible all -i 15.213.94.147, -m copy -a "dest=/var/www/html/ src=second.html" -u deploy-user -k -b
+	- http://15.213.94.145/second.html
+root@master:~# ansible all -i 15.213.94.147, -m copy -a "dest=/var/www/html/ src=second.html" -u deploy-user -k -b
+SSH password:
+[DEPRECATION WARNING]: Distribution Ubuntu 16.04 on host 15.213.94.147 should use /usr/bin/python3, but is using /usr/bin/python for backward compatibility with prior Ansible releases. A
+future Ansible release will default to using the discovered platform python for this host. See https://docs.ansible.com/ansible/2.8/reference_appendices/interpreter_discovery.html for more
+ information. This feature will be removed in version 2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+15.213.94.147 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+
+}
+Program 7 – Write a Ansible commands to install a package called “git”, “wget”.
+	- ansible all -i 15.213.94.147, -m apt -a "state=present name=git" -u deploy-user -k -b
+		- which git
+	- ansible all -i 15.213.94.147, -m apt -a "state=present name=wget" -u deploy-user -k -b
+		- which wget
+
+Program 8 – Write a Ansible Adhoc commands to clone git repo. https://github.com/scmgalaxy/ansible-role-template.
+	- ansible all -i 15.213.94.147, -m git -a "clone=yes dest=/home/madhu repo=https://github.com/scmgalaxy/ansible-role-template" -u deploy-user -k -b
+	
+
