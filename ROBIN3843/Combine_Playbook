@@ -1,0 +1,35 @@
+---
+- name: This sets up for user
+  hosts: gog
+  tasks:
+  - name: create group Ansible2
+    group: name=Ansible2
+  - name: Create User and make member of Ansible & /bin/bash
+    user: name=Robin2 group=Ansible2 shell=/bin/bash
+  - name: to install a package called “git”
+    yum: state=present name=git
+  - name: to install a package called “wget”
+    yum: state=present name=wget
+  - name: to clone git repo. thttps://github.com/scmgalaxy/ansible-role-template
+    git: clone=yes repo=https://github.com/scmgalaxy/ansible-role-template dest=/etc/ansible/Robin
+
+- name: This sets up an httpd webserver
+  hosts: gog
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+
+- name: to reboot a self machine
+  hosts: webservers
+  tasks:
+  - name: to reboot a self machine
+    reboot:
+
+...
+
