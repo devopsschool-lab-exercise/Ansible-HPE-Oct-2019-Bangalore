@@ -1,0 +1,149 @@
+[root@localhost ~]# yum install tree
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+epel/x86_64/metalink                                                                                          | 5.7 kB  00:00:00
+ * base: centos.excellmedia.net
+ * epel: fedora.cs.nctu.edu.tw
+ * extras: centos.excellmedia.net
+ * updates: centos.excellmedia.net
+base                                                                                                          | 3.6 kB  00:00:00
+epel                                                                                                          | 5.4 kB  00:00:00
+extras                                                                                                        | 2.9 kB  00:00:00
+updates                                                                                                       | 2.9 kB  00:00:00
+(1/2): epel/x86_64/updateinfo                                                                                 | 1.0 MB  00:00:01
+(2/2): epel/x86_64/primary_db                                                                                 | 6.9 MB  00:00:02
+Resolving Dependencies
+--> Running transaction check
+---> Package tree.x86_64 0:1.6.0-10.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+=====================================================================================================================================
+ Package                      Arch                           Version                              Repository                    Size
+=====================================================================================================================================
+Installing:
+ tree                         x86_64                         1.6.0-10.el7                         base                          46 k
+
+Transaction Summary
+=====================================================================================================================================
+Install  1 Package
+
+Total download size: 46 k
+Installed size: 87 k
+Is this ok [y/d/N]: yes
+Downloading packages:
+tree-1.6.0-10.el7.x86_64.rpm                                                                                  |  46 kB  00:00:00
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : tree-1.6.0-10.el7.x86_64                                                                                          1/1
+  Verifying  : tree-1.6.0-10.el7.x86_64                                                                                          1/1
+
+Installed:
+  tree.x86_64 0:1.6.0-10.el7
+
+Complete!
+
+[root@localhost Tree]# mkdir host_vars
+[root@localhost Tree]# mkdir group_vars
+[root@localhost Tree]# vi host_vars/10.76.136.250
+[root@localhost Tree]# touch host_vars/10.76.136.250
+[root@localhost Tree]# touch host_vars/10.76.137.71
+[root@localhost Tree]# touch group_vars/dbservers
+[root@localhost Tree]# touch group_vars/webservers
+[root@localhost Tree]# touch group_vars/all
+[root@localhost Tree]# tree
+.
+├── group_vars
+│   ├── all
+│   ├── dbservers
+│   └── webservers
+└── host_vars
+    ├── 10.76.136.250
+    └── 10.76.137.71
+
+2 directories, 5 files
+
+
+
+#################################################
+PlayBook
+---
+- name: This sets up an httpd webserver
+  hosts: dbservers
+  tasks:
+  - name: Template a file to /etc/files.conf
+    template:
+      src: httpd.j2
+      dest: /etc/httpd/conf/httpd.conf
+    notify:
+    - restart apache
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ Robing }}"
+  handlers:
+  - name: restart apache
+    service: name=httpd state=restarted
+…
+[root@localhost Tree]# pwd
+/etc/ansible/Tree
+
+
+drwxr-xr-x. 2 root root  47 Oct 10 13:45 host_vars
+drwxr-xr-x. 2 root root  52 Oct 10 13:46 group_vars
+-rw-r--r--. 1 root root 661 Oct 10 13:57 playbook.yaml
+-rw-r--r--. 1 root root 12K Oct 10 15:33 httpd.j2
+
+
+Output:-
+
+
+[root@localhost Tree]# ansible-playbook playbook.yaml
+
+PLAY [This sets up an httpd webserver] **********************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************
+ok: [10.76.136.250]
+
+TASK [Template a file to /etc/files.conf] *******************************************************************************************
+changed: [10.76.136.250]
+
+TASK [Install the httpd apps] *******************************************************************************************************
+ok: [10.76.136.250]
+
+TASK [start the httpd service] ******************************************************************************************************
+ok: [10.76.136.250]
+
+TASK [create a empty fle] ***********************************************************************************************************
+changed: [10.76.136.250]
+
+TASK [copy a file] ******************************************************************************************************************
+ok: [10.76.136.250]
+
+TASK [Ansible prompt example.] ******************************************************************************************************
+ok: [10.76.136.250] => {
+    "msg": "Robin Gupta in Inventory"
+}
+
+RUNNING HANDLER [restart apache] ****************************************************************************************************
+changed: [10.76.136.250]
+
+PLAY RECAP **************************************************************************************************************************
+10.76.136.250              : ok=8    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+
+#########################################################################################################
+
+
