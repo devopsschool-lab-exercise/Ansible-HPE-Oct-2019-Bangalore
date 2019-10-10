@@ -1,0 +1,5 @@
+---
+    myname: "Meera in External file"
+    package: "httpd"
+    service: "httpd"
+...
