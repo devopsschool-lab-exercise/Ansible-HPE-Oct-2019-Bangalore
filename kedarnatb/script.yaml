@@ -1,0 +1,15 @@
+---
+- name: This executes a script in remote
+  hosts: db
+  tasks:
+  - name: create a empty fle
+    file: dest=/tmp/script.sh state=touch mode=+x
+  - name: copy a file
+    copy: dest=/tmp/script.sh src="/home/ansible-training/script.sh"
+  - name: execute
+    shell: sh /tmp/script.sh > /tmp/log.txt
+  - name: Ansible prompt example.
+    debug:
+      msg: "script executed"
+...
+

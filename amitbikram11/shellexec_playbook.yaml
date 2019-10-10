@@ -1,0 +1,10 @@
+---
+- name: This sets up an httpd webserver
+  hosts: db
+
+  tasks:
+  - name: Copy the file to /tmp
+    copy: dest=/tmp/ src="/root/test.sh"
+  - name: Execute the script in remote
+    shell: sh /tmp/test.sh >/root/log.txt 
+...
