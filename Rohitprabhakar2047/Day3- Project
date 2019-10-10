@@ -1,0 +1,93 @@
+
+********************************
+Project
+*********************************
+Inventory
+[root@localhost tmp]# cat /tmp/inventory_new.ini
+[group1]
+10.76.138.41 ansible_user=root ansible_password=root ansible_become=yes
+10.76.137.79 ansible_user=root ansible_password=root ansible_become=yes
+
+----------------------------------
+[root@localhost tmp]# cat site.yaml
+---
+- name: apply common configuration to all nodes
+  hosts: group1
+
+  roles:
+    - webserver
+
+
+
+
+[root@localhost tmp]# ansible-playbook -i /tmp/inventory_new.ini site.yaml
+
+PLAY [apply common configuration to all nodes] ***************************************************************************************************************
+
+TASK [Gathering Facts] ***************************************************************************************************************************************
+ok: [10.76.138.41]
+ok: [10.76.137.79]
+
+TASK [webserver : This is task -1 Install http] **************************************************************************************************************
+ok: [10.76.138.41]
+ok: [10.76.137.79]
+
+TASK [webserver : HTTP to be started] ************************************************************************************************************************
+ok: [10.76.138.41]
+ok: [10.76.137.79]
+
+TASK [webserver : Install wget] ******************************************************************************************************************************
+ok: [10.76.138.41]
+ok: [10.76.137.79]
+
+TASK [webserver : Install git] *******************************************************************************************************************************
+ok: [10.76.138.41]
+ok: [10.76.137.79]
+
+TASK [webserver : Template a file to /etc/files.conf] ********************************************************************************************************
+ok: [10.76.138.41]
+changed: [10.76.137.79]
+
+TASK [webserver : Copy file] *********************************************************************************************************************************
+ok: [10.76.138.41]
+ok: [10.76.137.79]
+
+TASK [webserver : Group to be created] ***********************************************************************************************************************
+ok: [10.76.137.79]
+ok: [10.76.138.41]
+
+TASK [webserver : Create a file under opt] *******************************************************************************************************************
+changed: [10.76.138.41]
+changed: [10.76.137.79]
+
+TASK [webserver : Remove opt created file] *******************************************************************************************************************
+changed: [10.76.138.41]
+changed: [10.76.137.79]
+
+TASK [webserver : Create user] *******************************************************************************************************************************
+ok: [10.76.137.79]
+ok: [10.76.138.41]
+
+TASK [webserver : git clone in the server] *******************************************************************************************************************
+ok: [10.76.138.41]
+fatal: [10.76.137.79]: FAILED! => {"changed": false, "cmd": "/usr/bin/git clone --origin origin --separate-git-dir=/tmp/RohitPrabhakar2047 https://github.com/scmgalaxy/ansible-role-template /tmp/clone_rohit", "msg": "fatal: unable to access 'https://github.com/scmgalaxy/ansible-role-template/': Failed connect to github.com:443; Connection timed out", "rc": 128, "stderr": "fatal: unable to access 'https://github.com/scmgalaxy/ansible-role-template/': Failed connect to github.com:443; Connection timed out\n", "stderr_lines": ["fatal: unable to access 'https://github.com/scmgalaxy/ansible-role-template/': Failed connect to github.com:443; Connection timed out"], "stdout": "Cloning into '/tmp/clone_rohit'...\n", "stdout_lines": ["Cloning into '/tmp/clone_rohit'..."]}
+
+TASK [webserver : Print the variable Preci] ******************************************************************************************************************
+ok: [10.76.138.41] => {
+    "msg": "MainProgram"
+}
+
+TASK [webserver : Print Age] *********************************************************************************************************************************
+ok: [10.76.138.41] => {
+    "msg": 2
+}
+
+RUNNING HANDLER [webserver : restart apache] *****************************************************************************************************************
+
+PLAY RECAP ***************************************************************************************************************************************************
+10.76.137.79               : ok=11   changed=3    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0
+10.76.138.41               : ok=14   changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+

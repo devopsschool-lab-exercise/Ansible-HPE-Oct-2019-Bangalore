@@ -1,0 +1,13 @@
+[db]
+10.76.82.207
+
+[db:vars]
+myname="rajesh kumar in Inventory"
+package="httpd"
+service="httpd"
+
+[web]
+10.76.84.174
+
+[gog:children]
+db
