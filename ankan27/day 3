@@ -1,0 +1,30 @@
+Variable file (vars.yaml):-
+package: httpd
+
+yaml file
+- name: This sets up an httpd webserver on group db
+  hosts: db
+  vars_files:
+    - "vars.yaml"
+
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+
+  - name: start the httpd service
+    service: name={{ package }} state=started
+
+============================================================================================
+Script.sh
+touch /tmp/ankan_new.txt
+--------------------------
+Script.yaml
+---
+- name: This copies a file
+  hosts: web
+  tasks:
+  - name: Copy a file on remote location
+    copy: dest=/root/ src=/root/script.sh remote_src=no
+  - name: Execute the script
+    command: sh /root/script.sh
+...

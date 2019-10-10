@@ -1,0 +1,6 @@
+---
+- name: variables in external file
+  vars:
+    package: "httpd"
+    service: "httpd"
+...

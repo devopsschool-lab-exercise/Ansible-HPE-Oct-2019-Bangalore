@@ -1,0 +1,9 @@
+---
+- name: This creats a group called deploy with deploy-user
+  hosts: gog
+  tasks:
+  - name: Create a group with the name "deploy"
+    group: name=deploy
+  - name: Create a user with the name "deploy-user"
+    user: name=deploy-user group=deploy shell=/bin/bash
+...

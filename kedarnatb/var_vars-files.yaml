@@ -1,0 +1,23 @@
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  vars_files:
+    - "vars.yaml"
+
+  vars:
+    myname: "kb-playbook"
+    mycomp: "hp-playbook"
+
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - debug:
+      msg: System {{ myname }} has uuid {{ ansible_product_uuid }}
+  - debug: msg="System {{ myname }} has uuid {{ ansible_product_uuid }}"
+  - debug: msg={{ ansible_product_uuid }}
+  - debug: var=ansible_product_uuid
+  - debug:
+      var: ansible_product_uuid
+...

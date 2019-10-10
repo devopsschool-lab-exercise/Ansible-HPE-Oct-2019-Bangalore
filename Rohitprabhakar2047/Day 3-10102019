@@ -1,0 +1,48 @@
+
+*********************************************
+Day-3
+*********************************************8
+Inventory -->Playbook-->Externalvars
+[root@localhost ~]# cat /tmp/meri.yaml
+---
+  - name: This is HTTP Server
+    hosts: group1
+    vars:
+      Preci: "Play-2"
+      Age: "2"
+    vars_files:
+     - "Externalvars.yaml"
+    tasks:
+    - name: This is task -1 Install http
+      yum: name={{ nameofservice }}
+    - name: HTTP to be started
+      service: name={{ nameofservice }}
+    - name: Install wget
+      package: name=wget state=present
+    - name: Install git
+      package: name=git state=present
+    - name: Copy file
+      copy: src=/tmp/second.html dest=/var/www/html/
+    - name: Group to be created
+      group: name=Ansible_R_test
+    - name: Create a file under opt
+      file: state=touch path=/opt/toberemoved.txt
+    - name: Remove opt created file
+      file: state=absent path=/opt/toberemoved.txt
+    - name: Create user
+      user: name=Ansible_Client group=Ansible_R_test
+    - name: git clone in the server
+      git: repo=https://github.com/scmgalaxy/ansible-role-template dest=/tmp/clone_rohit clone=yes separate_git_dir=/tmp/RohitPrabhakar2047
+    - name: Print the variable Preci
+      debug:
+        msg: "{{ Preci }}"
+    - name: Print Age
+      debug:
+        msg: "{{ Age }}"
+...
+
+[root@localhost ~]# cat /tmp/Externalvars.yaml
+---
+Preci: "External"
+Age: "3"
+....

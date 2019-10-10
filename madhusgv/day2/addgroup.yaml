@@ -1,0 +1,7 @@
+- hosts: gog
+  gather_facts: no
+  tasks:
+  - name: Ensure group deploy exists
+    group:
+       name: deploy
+       state: present

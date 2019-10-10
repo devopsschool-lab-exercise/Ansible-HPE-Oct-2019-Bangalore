@@ -1,0 +1,125 @@
+#Create a playbook and setup a webserver---Inventory
+
+#Contents of variable.ymal
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  vars:
+    myname: "jishith in Playbook"
+    package: "httpd"
+    service: "httpd"
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+...
+
+#Contents of inventory
+
+[db]
+10.76.84.136  ansible_user=root ansible_password=12iso*help    ansible_become=yes
+10.76.82.120  ansible_user=root ansible_password=12iso*help    ansible_become=yes
+
+[db:vars]
+myname="httpd in Inventory"
+package="httpd"
+
+
+Playbook
+==============
+
+---
+- name: This sets up an httpd webserver
+  hosts: localhost
+  vars:
+    myname: "Jishith"
+    package: "httpd"
+    service: "httpd"
+
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="index.html"
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+...
+
+
+
+
+
+==================
+External Files
+
+# Content of var_vars-files.yaml
+---
+- name: This sets up an httpd webserver
+  hosts: web
+  vars_files:
+    - "vars.yaml"
+
+  vars:
+    myname: "Jishith-playbook"
+    
+
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - debug:
+      msg: System {{ myname }}
+...
+
+#Contents of external file
+
+---
+myname: "httpd"
+
+...
+
+Command Prompt
+===================
+
+ ansible-playbook -c local -i localhost, test.yml --extra-vars='{"test_list": [1,2,3]}'
+
+
+
+
+
+
+Executing a shell script 
+============================
+---
+   - name: Combined Tasks
+     hosts: db
+     tasks:
+
+      - name: copying a file
+        copy: src=script.sh dest=/tmp
+      - name: Editing Permission
+        file: path=/tmp/script.sh mode=755
+      - name: Execute a script
+        script: /tmp/script.sh --some-argument 1234
+
+...
+
+
+
+
+
+

@@ -1,0 +1,134 @@
+Variable in Playbook:
+=======================
+---
+- name: This sets up an httpd webserver
+  hosts: one
+  vars:
+    myname: "Variables in playbook"
+    package: "httpd"
+    path: "/var/www/html/"
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{ package }} state=started
+  - name: copy a file
+    copy: src=index.html dest={{ path }}
+  - name: Check variable precedence
+    debug:
+      msg: "{{myname}}"
+...
+
+
+=======================================================================
+
+Variable in inventory
+======================
+---
+- name: This sets up an httpd webserver
+  hosts: one
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{ package }} state=started
+  - name: copy a file
+    copy: src=index.html dest={{ path }}
+  - name: Check variable precedence
+    debug:
+      msg: "{{myname}}"
+...
+
+---
+- name: This sets up an httpd webserver
+  hosts: one
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{ package }} state=started
+  - name: copy a file
+    copy: src=index.html dest={{ path }}
+  - name: Check variable precedence
+    debug:
+      msg: "{{myname}}"
+...
+
+inventory
+
+[one]
+10.76.85.17 ansible_user=deploy-user ansible_become=yes
+10.76.81.11 ansible_user=client ansible_become=yes
+
+[one:vars]
+myname="Variables in Inventory"
+package="httpd"
+path="/var/www/html"
+#service="httpd"
+
+#[three]
+#10.35.34.5
+
+#[gog:children]
+#one
+#two
+
+=========================================================
+
+Variable in external file
+==============================
+
+---
+- name: This sets up an httpd webserver
+  hosts: one
+  vars_files:
+    - "external-vars.yml"
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{ package }} state=started
+  - name: copy a file
+    copy: src=index.html dest={{ path }}
+  - name: Check variable precedence
+    debug:
+      msg: "{{myname}}"
+...
+
+
+external file
+
+---
+myname: "Variables in external file"
+package: "httpd"
+path: "/var/www/html/"
+...
+
+===================================================
+
+Variable in command prompt
+=========================
+
+---
+- name: This sets up an httpd webserver
+  hosts: one
+  vars_files:
+    - "external-vars.yml"
+  vars_prompt:
+    - name: "version"
+      prompt: " which version do u want to install"
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{ package }} state=started
+  - name: copy a file
+    copy: src=index.html dest={{ path }}
+  - name: Check variable precedence
+    debug:
+      msg: "{{myname}}"
+  - name: check the prompt message
+    debug:
+      msg: "{{version}}"
+...
+

@@ -1,0 +1,7 @@
+---
+- name: MY Create GROUP playbook
+  hosts: db
+  tasks:
+  - name: Create GROUP
+    group: name=deploy
+...

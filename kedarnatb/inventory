@@ -1,0 +1,8 @@
+[db]
+15.112.156.251 ansible_user=root
+
+[db:vars]
+myname="hpe ansible training-inventory"
+package="httpd"
+service="httpd"
+

@@ -1,0 +1,9 @@
+---
+- name: To create a dummy html content
+  hosts: db
+  tasks:
+  - name: create a empty fle
+    file: state=touch dest=/var/www/html/second.html
+  - name: write into the file
+    lineinfile: path=/var/www/html/index.html state=present line='Ansilble - Training'
+...

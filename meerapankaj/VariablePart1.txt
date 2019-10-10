@@ -1,0 +1,329 @@
+-Excersice Variable part1:
+
+*****************************************************************************
+
+Priority:
+External variables
+prompt variable
+Playbook
+Inventory
+
+
+************************************************************************************
+
+Assigment 1 – Create a playbook and setup a webserver(httpd) and use httpd as a variable decalared in inventory.
+
+Inventory:
+
+[db]
+15.153.133.60 ansible_user=deploy-user ansible_password=training123 ansible_become=yes
+15.153.133.59 ansible_user=root ansible_password=Cms@123 
+
+[db:vars]
+myname="Meera in Inventory"
+package="httpd"
+service="httpd"
+
+[web]
+15.153.133.61 ansible_user=deploy-user ansible_password=training123 ansible_become=yes
+
+[common]
+15.153.133.59 ansible_user=root ansible_password=Cms@123
+
+[gog:children]
+db
+common
+
+Playbook:
+
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{service}} state=started
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+...
+
+
+command:
+ansible-playbook -i inventory  part1Ex1.yml
+
+
+
+output:
+
+[root@prmvm2 part1]# ansible-playbook -i inventory  part1Ex1.yml
+
+PLAY [This sets up an httpd webserver] **********************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [Install the httpd apps] *******************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+TASK [start the httpd service] ******************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+TASK [Ansible prompt example.] ******************************************************************************************************************************
+ok: [15.153.133.60] => {
+    "msg": "Meera in Inventory"
+}
+ok: [15.153.133.59] => {
+    "msg": "Meera in Inventory"
+}
+
+PLAY RECAP **************************************************************************************************************************************************
+15.153.133.59              : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+15.153.133.60              : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+
+
+
+
+*************************************************************************************************************************************************************************
+Assigment 2 – Create a playbook and setup a webserver(httpd) and use httpd as a variable decalared in Playbooks.
+
+playbook:
+
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  vars:
+    myname: "Meera in Playbook"
+    package: "httpd"
+    service: "httpd"
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{service}} state=started
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+...
+
+
+output:
+
+[root@prmvm2 part1]# ansible-playbook -i inventory  part1Ex2.yml
+
+PLAY [This sets up an httpd webserver] **********************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [Install the httpd apps] *******************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+TASK [start the httpd service] ******************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [Ansible prompt example.] ******************************************************************************************************************************
+ok: [15.153.133.60] => {
+    "msg": "Meera in Playbook"
+}
+ok: [15.153.133.59] => {
+    "msg": "Meera in Playbook"
+}
+
+PLAY RECAP **************************************************************************************************************************************************
+15.153.133.59              : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+15.153.133.60              : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+*************************************************************************************************************************************************************
+
+
+Assigment 3 – Create a playbook and setup a webserver(httpd) and use httpd as a variable decalared in external file.
+
+
+playbook:
+
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  vars_files:
+    - "vars.yaml"
+  vars:
+    myname: "Meera in Playbook"
+    package: "httpd"
+    service: "httpd"
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{service}} state=started
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+...
+
+
+vars.yaml
+
+
+---
+    myname: "Meera in External file"
+    package: "httpd"
+    service: "httpd"
+...
+
+
+
+output:
+
+[root@prmvm2 part1]# ansible-playbook -i inventory  part1Ex3.yaml
+
+PLAY [This sets up an httpd webserver] **********************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [Install the httpd apps] *******************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+TASK [start the httpd service] ******************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [Ansible prompt example.] ******************************************************************************************************************************
+ok: [15.153.133.60] => {
+    "msg": "Meera in External file"
+}
+ok: [15.153.133.59] => {
+    "msg": "Meera in External file"
+}
+
+PLAY RECAP **************************************************************************************************************************************************
+15.153.133.59              : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+15.153.133.60              : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+**********************************************************************************************************************************************************************************
+Assigment 6 – Create a playbook and setup a webserver(httpd), pass the httpd package name decalared on command prompt
+
+
+playbook:
+
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  vars_files:
+    - "vars.yaml"
+  vars:
+    myname: "Meera in Playbook"
+    package: "httpd"
+    service: "httpd"
+  vars_prompt:
+     - name: "age"
+       private: yes
+       prompt: "Enter your age"
+     - name: "myname"
+       private: no
+       prompt: "Enter your name"
+     - name: "package"
+       private: no
+       prompt: "Package you need to run"
+	 - name: "service"
+       private: no
+       prompt: "service you need to run"
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{service}} state=started
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+...
+
+
+Output:
+
+[root@prmvm2 part1]# ansible-playbook -i inventory  part1Ex6.yaml
+Enter your age:
+Enter your name: Meera
+Package you need to run: httpd
+service you need to run: httpd
+
+PLAY [This sets up an httpd webserver] **********************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [Install the httpd apps] *******************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+TASK [start the httpd service] ******************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [Ansible prompt example.] ******************************************************************************************************************************
+ok: [15.153.133.60] => {
+    "msg": "Meera in External file"
+}
+ok: [15.153.133.59] => {
+    "msg": "Meera in External file"
+}
+
+PLAY RECAP **************************************************************************************************************************************************
+15.153.133.59              : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+15.153.133.60              : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+
+Note: id external variables in removed, then priority is for promt variables.
+
+
+[root@prmvm2 part1]# ansible-playbook -i inventory  part1Ex6.yaml
+Enter your age:
+Enter your name: Meera
+Package you need to run: httpd
+service you need to run: httpd
+
+PLAY [This sets up an httpd webserver] **********************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+TASK [Install the httpd apps] *******************************************************************************************************************************
+ok: [15.153.133.60]
+ok: [15.153.133.59]
+
+TASK [start the httpd service] ******************************************************************************************************************************
+ok: [15.153.133.59]
+ok: [15.153.133.60]
+
+TASK [Ansible prompt example.] ******************************************************************************************************************************
+ok: [15.153.133.60] => {
+    "msg": "Meera"
+}
+ok: [15.153.133.59] => {
+    "msg": "Meera"
+}
+
+PLAY RECAP **************************************************************************************************************************************************
+15.153.133.59              : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+15.153.133.60              : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+*************************************************************************************************************************************************************************

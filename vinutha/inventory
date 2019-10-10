@@ -1,0 +1,30 @@
+[db]
+10.76.82.140  ansible_user=root ansible_ssh_private_key_file=remote.pem ansible_become=yes
+10.76.82.138  ansible_user=root ansible_ssh_private_key_file=remote.pem ansible_become=yes
+
+[db:vars]
+myname="vinutha in Inventory"
+package="httpd"
+service="httpd"
+
+[webserver]
+10.76.82.138
+4.4.4.4
+5.5.5.6
+
+[common]
+10.76.82.138
+
+[gog:children]
+db
+common
+
+[inventory:children]
+db
+common
+
+
+[inventory:vars]
+package="httpd"
+service="httpd"
+myname="httpd"

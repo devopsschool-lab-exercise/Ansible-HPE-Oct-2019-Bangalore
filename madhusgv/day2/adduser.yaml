@@ -1,0 +1,7 @@
+- hosts: gog
+  gather_facts: no
+  tasks:
+  - name: Ensure user deploy-user exists
+    user:
+       name: deploy-user
+       state: present

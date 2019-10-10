@@ -1,0 +1,7 @@
+---
+- name: This sets up wget
+  hosts: web
+  tasks:
+  - name: Install wget
+    yum: name=wget
+...

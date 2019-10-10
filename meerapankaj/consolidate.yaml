@@ -1,0 +1,50 @@
+---
+- name: Create a group deploy
+  hosts: db
+  tasks:
+  - name: create a group deploy
+    group: name=deploy
+
+- name: create a user deploy-user and assign it to group deploy
+  hosts: db
+  tasks:
+  - name: create a group deploy
+    user: name=deploy-user shell=/bin/bash groups=deploy append=yes
+
+- name: This sets up an httpd webserver
+  hosts: db
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+
+- name: To create a dummy html content
+  hosts: db
+  tasks:
+  - name: create a empty fle
+    file: state=touch dest=/var/www/html/second.html
+  - name: write into the file
+    lineinfile: path=/var/www/html/index.html state=present line='Ansilble - Training'
+
+- name: Install package git and wget
+  hosts: gog
+  tasks:
+  - name: install git
+    yum: state=present name=git
+  - name: install wget
+    yum: state=present name=wget
+
+- name: Clone git
+  hosts: web
+  tasks:
+  - name: clone git repo
+    git: repo=https://github.com/scmgalaxy/ansible-role-template dest=/opt/hpsdp/meera
+
+- name: To create a dummy html content
+  hosts: web
+  tasks:
+  - name: Unconditionally reboot the machine with all defaults
+    reboot:
+
+...

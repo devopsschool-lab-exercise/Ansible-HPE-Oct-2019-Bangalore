@@ -1,0 +1,130 @@
+---
+
+- name: Create a user group called ankan
+  hosts: db
+  tasks:
+  - name: Create group called ankan
+    group: name=ankan
+
+- name: Create a user in group ankan
+  hosts: db
+  tasks:
+  - name: add user in group ankan
+    user: name=user_ankan group=ankan shell=/bin/bash
+
+- name: This sets up an httpd webserver on group db
+  hosts: db
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+
+- name: This sets up an httpd webserver on group web
+  hosts: web
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+
+- name: This installs and starts the git package
+  hosts: web
+  tasks:
+  - name: Install the git
+    yum: name=git state=present
+
+
+- name: This installs and starts the wget package
+  hosts: web
+  tasks:
+  - name: Install the wget
+    yum: name=wget state=present
+
+- name: This clones a git repo
+  hosts: web
+  tasks:
+  - name: clone a git repo
+    git: repo=https://github.com/scmgalaxy/ansible-role-template dest=/tmp/clone_ank clone=yes separate_git_dir=/tmp/ankan
+
+- name: This touches (creates a file)
+  hosts: web
+  tasks:
+  - name: Touches (Creates a file) devopsschool.txt
+    file: path=/opt/devopsschool.txt state=touch
+
+- name: This removes a file devopsschool.txt
+  hosts: web
+  tasks:
+  - name: Removed the below file
+    file: path=/opt/devopsschool.txt state=absent
+
+...
+
+
+---------------------Output--------------------------------------------------
+[root@localhost ~]# ansible-playbook -i inventory ankan.yaml
+
+PLAY [This sets up an httpd webserver on group db] *****************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [10.76.137.83]
+
+TASK [Install the httpd apps] **************************************************
+ok: [10.76.137.83]
+
+TASK [start the httpd service] *************************************************
+ok: [10.76.137.83]
+
+TASK [create a empty fle] ******************************************************
+changed: [10.76.137.83]
+
+TASK [copy a file] *************************************************************
+ok: [10.76.137.83]
+
+PLAY [This sets up an httpd webserver on group web] ****************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [10.76.137.118]
+
+TASK [Install the httpd apps] **************************************************
+ok: [10.76.137.118]
+
+TASK [start the httpd service] *************************************************
+ok: [10.76.137.118]
+
+TASK [create a empty fle] ******************************************************
+changed: [10.76.137.118]
+
+TASK [copy a file] *************************************************************
+ok: [10.76.137.118]
+
+PLAY [This installs and starts the wget package] *******************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [10.76.137.118]
+
+TASK [Install the wget] ********************************************************
+ok: [10.76.137.118]
+
+PLAY [This clones a git repo] **************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [10.76.137.118]
+
+TASK [clone a git repo] ********************************************************
+ok: [10.76.137.118]
+
+PLAY RECAP *********************************************************************
+10.76.137.118              : ok=9    changed=1    unreachable=0    failed=0    s                                                                             kipped=0    rescued=0    ignored=0
+10.76.137.83               : ok=5    changed=1    unreachable=0    failed=0    s                                                                             kipped=0    rescued=0    ignored=0
+
+[root@localhost ~]#
