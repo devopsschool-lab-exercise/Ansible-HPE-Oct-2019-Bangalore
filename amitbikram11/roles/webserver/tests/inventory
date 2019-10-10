@@ -1,0 +1,15 @@
+[web]
+10.76.140.148
+
+[db]
+10.76.140.153
+
+[gog:children]
+db
+web
+
+[gog:vars]
+ansible_user=root
+ansible_password=root
+todate=Oct10
+current_session=Ansible_BLR_OCT

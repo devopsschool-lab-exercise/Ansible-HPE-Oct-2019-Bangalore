@@ -1,0 +1,7 @@
+---
+# vars file for webserver
+service: httpd
+package: httpd
+username: ambikram
+port: 80
+chkn: 10
