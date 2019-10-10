@@ -1,0 +1,4 @@
+myname: "Madhu in gorup_vars-all"
+package: "apache2"
+service: "apache2"
+port: 8080

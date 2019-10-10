@@ -1,0 +1,53 @@
+---
+# tasks file for webservers
+  - name: Install apache2
+    apt:
+       name: "{{package}}"
+       state: present
+    when: ansible_distribution == 'Ubuntu'
+  - name: Start apache2
+    service:
+       name: "{{service}}"
+       state: started
+       enabled: true
+  - name: Template a file to /etc/apache2/ports.conf
+    template:
+       src: ports.j2
+       dest: /etc/apache2/ports.conf
+    notify:
+       - restart apache
+  - name: copy start.sh
+    copy:
+       src: start.sh
+       dest: /home/madhu/
+       mode: preserve
+  - name: execute start.sh
+    shell: /home/madhu/start.sh
+    register: scriptoutput
+  - name: Template a file to index.html
+    template:
+       src: index.j2
+       dest: /var/www/html/index.html
+
+  - name: Ensure group deploy exists
+    group:
+       name: deloitte
+       state: present
+
+  - name: Ensure user deploy-user exists
+    user:
+       name: deploy-user
+       state: present
+
+#  - name: install packages
+#    apt:
+#       name: "{{item}}"
+#       state: present
+#    with_items:
+#       - git
+#       - ntp
+#       - vim
+
+  - name: Ansible variables
+    debug:
+       msg: "{{myname}}"

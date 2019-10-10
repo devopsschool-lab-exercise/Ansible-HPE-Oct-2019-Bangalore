@@ -16,7 +16,6 @@
        dest: /etc/apache2/ports.conf
     notify:
        - restart apache
-
   - name: Ansible variables
     debug:
        msg: "{{myname}}"

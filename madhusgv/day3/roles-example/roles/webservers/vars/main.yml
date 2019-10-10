@@ -1,0 +1,5 @@
+---
+# vars file for webservers
+myname: "Madhu in roles-vars-vars"
+package: "apache2"
+service: "apache2"

@@ -1,0 +1,5 @@
+---
+# defaults file for webservers
+myname: "Madhu in roles-default-vars"
+package: "apache2"
+service: "apache2"

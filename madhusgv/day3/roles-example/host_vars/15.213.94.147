@@ -1,0 +1,3 @@
+myname: "Madhu in host-vars - 15.213.94.147 file"
+package: "apache2"
+service: "apache2"
