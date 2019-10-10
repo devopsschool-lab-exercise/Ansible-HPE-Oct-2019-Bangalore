@@ -1,0 +1,5 @@
+---
+# vars file for webserver
+  nameofservice: "httpd"
+  Preci: MainProgram
+  Age: 2 
