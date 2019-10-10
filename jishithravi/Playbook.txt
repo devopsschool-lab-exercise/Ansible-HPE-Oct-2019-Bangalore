@@ -1,0 +1,21 @@
+---
+- name: Combined Tasks
+  hosts: db
+  tasks:
+  - name: create group deploy
+    group: name=deploy
+  - name: create user deploy-user1
+    user: name=deploy-user1 group=deploy shell=/bin/bash
+  - name: Install the httpd
+    yum:  name=httpd
+  - name: start the httpd 
+    service: name=httpd state=started
+  - name: git Install
+    yum: state=present name=git
+  - name: copying a file
+    copy: src=index.html dest=/root/index.html
+  - name: wget install
+    yum: state=present name=wget
+  - name: clone git repo
+    git: clone=yes repo=https://github.com/scmgalaxy/ansible-role-template dest=/etc/bin/git
+...

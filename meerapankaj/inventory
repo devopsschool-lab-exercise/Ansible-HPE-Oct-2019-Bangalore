@@ -1,0 +1,19 @@
+[db]
+15.153.133.60 ansible_user=deploy-user ansible_password=training123 ansible_become=yes
+15.153.133.59 ansible_user=root ansible_password=Cms@123 
+
+[db:vars]
+myname="Meera in Inventory"
+package="httpd"
+service="httpd"
+
+[web]
+15.153.133.61 ansible_user=deploy-user ansible_password=training123 ansible_become=yes
+
+[common]
+15.153.133.59 ansible_user=root ansible_password=Cms@123
+
+[gog:children]
+db
+common
+

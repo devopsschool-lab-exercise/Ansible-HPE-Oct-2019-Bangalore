@@ -1,0 +1,116 @@
+1-->ariable decalared in inventory
+
+[deploy-user@localhost ~]$ vi decalared_inventory.ymal
+---
+- name: This sets to create webserver(httpd)
+  hosts: db
+  tasks:
+  - name: start the httpd service
+    service: name=httpd state=started
+...
+
+
+2--> Variable decalared in Playbooks
+
+[deploy-user@localhost ~]$ vi decalared_Playbooks.ymal
+---
+- name: This setup a webserver(httpd)
+  hosts: db
+  vars:
+    myname: "Nikitain Playbook"
+    package: "httpd"
+    service: "httpd"
+  tasks:
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: start the httpd enabled
+    service: name={{ service }}
+  - name: Ansible prompt example.
+    debug:
+     msg: "{{ myname }}"
+...
+
+
+3 --> variable decalared in external file
+
+[deploy-user@localhost ~]$ vi external_file.yaml
+---
+myname: "Varible in extrnal file"
+package: "httpd"
+...
+
+~
+part3-A :
+
+-bash: vim: command not found
+[deploy-user@localhost ~]$ vi decalared_external_file.yaml
+---
+- name: This sets to create deploye
+  hosts: db
+  vars_files:
+     - "external_file.yaml"
+
+  vars:
+    myname: "Nikitain Playbook"
+    package: "httpd"
+    service: "httpd"
+  tasks:
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: start the httpd enabled
+    service: name={{ service }}
+  - name: Ansible prompt example.
+    debug:
+     msg: "{{ myname }}"
+...
+~
+~
+
+4--> package name decalared on command prompt`
+
+---
+- name: This sets to create deploye
+  hosts: db
+  vars_files:
+     - "external_file.yaml"
+  vars:
+    myname: "Nikitain Playbook"
+    package: "httpd"
+    service: "httpd"
+
+  vars_prompt:
+    name: "version"
+    prompt: "What is your name?"
+
+  tasks:
+  - name: create a group called deploy
+    group: name=deploy
+  - name: create user call deploy-user1
+    user: name=deploy-user1 group=deploy shell=/bin/bash
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: start the httpd enabled
+    service: name={{ service }}
+  - name: install  git
+    yum: state=present name=git
+  - name: copy a file
+    copy: src=index.html dest=/root/index.html
+  - name: install  wget
+    yum: state=present name=wget
+  - name: clone git repo
+    git: clone=yes repo=https://github.com/scmgalaxy/ansible-role-template dest=/etc/bin/git
+  - name: Ansible prompt example.
+    debug:
+     msg: "{{ version }}"
+...
+
+
+
+~
+~
+~
+
+~
+~
+~
+~

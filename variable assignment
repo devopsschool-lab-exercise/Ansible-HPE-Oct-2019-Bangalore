@@ -1,0 +1,27 @@
+---
+- name: This sets up an httpd webserver
+  hosts: webserver
+  vars:
+    mypackage: "httpd from playbook"
+    package: "httpd"
+    service: "httpd"
+  vars_prompt:
+    - name: "mypackage"
+      prompt: "Which package do you want to install?"
+      private: yes
+  vars_files:
+    - "vars_asn3.yml"
+  tasks:
+  - include_vars: vars_asn5.yml
+  - name: Install the httpd apps
+    yum:
+      name={{ package }}
+  - name: start the httpd service
+    service:
+      name={{ service }} state=started
+  - name: Ansible prompt example.
+    debug:
+      msg:
+       "Variable package is {{ mypackage }}"
+...
+
