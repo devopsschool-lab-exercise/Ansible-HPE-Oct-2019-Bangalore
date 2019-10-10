@@ -1,0 +1,7 @@
+---
+- name: To create a dummy html content
+  hosts: db
+  tasks:
+  - name: Unconditionally reboot the machine with all defaults
+    reboot:
+...

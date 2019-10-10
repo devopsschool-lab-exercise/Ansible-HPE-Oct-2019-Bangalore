@@ -1,0 +1,7 @@
+- hosts: gog
+  gather_facts: no
+  tasks:
+  - name: Install apache2
+    apt:
+       name: apache2
+       state: present

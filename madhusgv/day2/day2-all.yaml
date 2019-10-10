@@ -1,0 +1,42 @@
+- hosts: gog
+  gather_facts: no
+  tasks:
+  - name: Ensure group deploy exists
+    group:
+       name: deploy
+       state: present
+  - name: Ensure user deploy-user exists
+    user:
+       name: deploy-user
+       state: present
+  - name: Install apache2
+    apt:
+       name: apache2
+       state: present
+  - name: Start apache2
+    service:
+       name: apache2
+       state: started
+       enabled: true
+  - name: Create index.html
+    file:
+       path: /var/www/html/index.html
+       state: touch
+  - name: update index.html
+    lineinfile:
+       path: /var/www/html/index.html
+       state: present
+       line: 'My Web Page'
+  - name: install git
+    apt:
+       name: git
+       state: present
+  - name: install wget
+    apt:
+       name: wget
+       state: present
+  - name: clone git repo
+    git:
+       clone: yes
+       dest: '/home/madhu'
+       repo: 'https://github.com/scmgalaxy/ansible-role-template'

@@ -1,0 +1,3 @@
+myname: "Madhu in external file"
+package: "apache2"
+service: "apache2"
