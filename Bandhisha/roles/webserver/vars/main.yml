@@ -1,0 +1,6 @@
+---
+# vars file for webserver
+    myname: "rajesh kumar in Playbook"
+    package: "httpd"
+    service: "httpd"
+    port: "8080"
