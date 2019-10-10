@@ -1,0 +1,33 @@
+- hosts: gog
+  gather_facts: no
+  vars_files:
+    - /etc/ansible/external_vars.yml
+  vars:
+    myname: "Madhu in playbook"
+    package: "apache2"
+    service: "apache2"
+  vars_prompt:
+    - name: "myname"
+      prompt: "what is your name?"
+      private: no
+    - name: "package"
+      prompt: "what is your package?"
+      private: no
+    - name: "service"
+      prompt: "what is your service?"
+      private: no
+
+  tasks:
+  - name: Install apache2
+    apt:
+       name: "{{package}}"
+       state: present
+  - name: Start apache2
+    service:
+       name: "{{service}}"
+       state: started
+       enabled: true
+  - name: Ansible variables
+    debug:
+       msg: "{{myname}}"
+    
