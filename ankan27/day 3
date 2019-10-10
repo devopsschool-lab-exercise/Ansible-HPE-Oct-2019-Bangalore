@@ -28,3 +28,56 @@ Script.yaml
   - name: Execute the script
     command: sh /root/script.sh
 ...
+
+========================================================================================================================
+         ROLES:
+Creating role:-
+ansible-galaxy init webserver
+
+site.yaml
+- name: apply common configuration to all nodes
+  hosts: db
+
+  roles:
+    - webserver
+    
+ Command to execute:-
+ ansible-playbook -i inventory site.yaml --tags "webserver"
+ 
+ Output:-
+ [root@localhost ~]# ansible-playbook -i inventory site.yaml --tags "webserver"
+
+PLAY [apply common configuration to all nodes] **************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [10.76.137.83]
+
+PLAY RECAP **************************************************************************************************************************************************
+10.76.137.83               : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+TREE
+└── webserver
+    ├── defaults
+    │   └── main.yml
+    ├── files
+    │   └── index.html
+    ├── handlers
+    │   └── main.yml
+    ├── meta
+    │   └── main.yml
+    ├── README.md
+    ├── tasks
+    │   └── main.yml
+    ├── templates
+    │   └── httpd.j2
+    ├── tests
+    │   ├── inventory
+    │   └── test.yml
+    └── vars
+        └── main.yml
+
+
+
+ 
+ 
