@@ -1,0 +1,4 @@
+- name: create a group deloitte
+  group: name=deloitte
+- name: create a group deloitte-user
+  user: name=deloitte-user shell=/bin/bash groups=deloitte append=yes

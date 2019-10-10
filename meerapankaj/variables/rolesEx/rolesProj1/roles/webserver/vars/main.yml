@@ -1,0 +1,6 @@
+---
+# vars file for webserver
+myname: MeeraVars
+package: httpd
+service: httpd
+port: 80

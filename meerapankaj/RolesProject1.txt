@@ -1,0 +1,93 @@
+Step 1 – Create a role which has following specification.
+
+Install a webserver httpd # use role/vars/ -done
+Add cond…httpd should be done only if RHEL. -done
+Copy a index.j2 into /var/www/html # Use Template -done
+Copy a httpd.j2 into /etc/httpd/conf/httpd.conf and change the port from 80 to 8080 # Use Template -done
+Write a handler for httpd.conf changes for restartting a httpd - done
+Run one Shell Script - done
+Whatever the outout of Shell Script should register into vars and display in index.html
+Create one linux group called “deloitte” and user called “deploy” - done
+index.j2 should have few fact vars, prompt vars, role/vars and inventory vars. All of them are duplicate but with
+the same value.
+Install a git, ntp and vim tools using ansible looping/iterators - done
+
+
+tasks:
+
+  - name: Template a file to /etc/httpd/conf/httpd.conf
+    template:
+      src: httpd.j2
+      dest: /etc/httpd/conf/httpd.conf
+    notify:
+    - restart apache
+  - name: Install the httpd apps
+    yum: name={{ package }}
+	when:
+		- ansible_distribution == "RedHat"
+        - ansible_distribution_major_version == "7.4"
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: Include a play copyhtml
+	include: copyHtml.yaml
+  - name: Include a play runscript
+	include: executeScript.yaml
+  - name: Include a play runscript
+	include: groupCreate.yaml
+  - name: Include a play install tools
+	include: installTools.yaml.yaml
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+
+
+copyHtml.yaml
+
+- name: Template a file to /var/www/html
+    template:
+      src: index.j2
+      dest: /var/www/html/index.html
+- name: copy a file
+    copy: dest=/var/www/html/ src="index.html"
+	  
+	  
+executeScript.yaml
+
+- name: copy a script file
+    copy: dest=/tmp src="script.sh"
+  - name: change the permission
+    file:
+     path: /tmp/script.sh
+     mode: 0775
+  - name: execute the script file
+    script: /tmp/script.sh
+	
+
+groupCreate.yaml
+
+  - name: create a group deloitte
+    group: name=deloitte
+  - name: create a group deloitte-user
+    user: name=deloitte-user shell=/bin/bash groups=deloitte append=yes
+
+
+installTools.yaml
+
+- name: install git
+  yum: state=present name=git
+- name: install ntp
+  yum: state=present name=ntp
+- name: install vim
+  yum: state=present name=vim
+  
+  
+- name: install packages
+  yum:
+   name: "{{item}}"
+   state: present
+  with_items:
+   - git
+   - ntp
+   - vim 

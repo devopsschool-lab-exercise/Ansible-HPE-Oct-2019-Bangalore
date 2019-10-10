@@ -3,6 +3,9 @@
 *****************************************************************************
 
 Priority:
+in vars main.yaml
+host vars
+group vars
 External variables
 prompt variable
 Playbook

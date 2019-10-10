@@ -1,0 +1,26 @@
+  - name: Template a file to /etc/httpd/conf/httpd.conf
+    template:
+      src: httpd.j2
+      dest: /etc/httpd/conf/httpd.conf
+    notify:
+    - restart apache
+  - name: Install the httpd apps
+    yum: name={{ package }}
+    when:
+     - ansible_distribution == "RedHat"
+     - ansible_distribution_major_version == "7.4"
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: Include a play copyhtml
+    include: copyHtml.yaml
+  - name: Include a play runscript
+    include: executeScript.yaml
+  - name: Include a play runscript
+    include: groupCreate.yaml
+  - name: Include a play install tools
+    include: installTools.yaml
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"

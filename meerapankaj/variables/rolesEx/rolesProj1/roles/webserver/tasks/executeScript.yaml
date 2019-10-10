@@ -1,0 +1,8 @@
+  - name: copy a script file
+    copy: dest=/tmp src="script.sh"
+  - name: change the permission
+    file:
+     path: /tmp/script.sh
+     mode: 0775
+  - name: execute the script file
+    script: /tmp/script.sh

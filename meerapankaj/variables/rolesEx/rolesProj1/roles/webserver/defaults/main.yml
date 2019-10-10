@@ -1,0 +1,5 @@
+---
+# defaults file for webserver
+package: httpd
+service: httpd
+myname: MeeraDefault

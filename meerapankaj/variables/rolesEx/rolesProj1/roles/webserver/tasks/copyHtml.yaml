@@ -1,0 +1,4 @@
+- name: Template a file to /var/www/html
+  template:
+   src: index.j2
+   dest: /var/www/html/index.html
