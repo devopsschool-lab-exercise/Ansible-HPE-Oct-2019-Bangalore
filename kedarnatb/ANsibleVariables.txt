@@ -1,0 +1,66 @@
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  vars:
+    myname: "hpe ansible training-Playbook"
+    package: "httpd"
+    service: "httpd"
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: create a empty fle
+    file: dest=/home/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+...
+
+=====================================================================
+
+[root@DELRM01 ansible-training]# vim inventory
+[db]
+15.112.156.251 ansible_user=root
+
+[db:vars]
+myname="hpe ansible training-inventory"
+package="httpd"
+service="httpd"
+
+====================================================================
+var_vars-files.yaml
+
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  vars_files:
+    - "vars.yaml"
+
+  vars:
+    myname: "kb-playbook"
+    mycomp: "hp-playbook"
+
+  tasks:
+  - name: Install the httpd apps
+    yum: name=httpd
+  - name: start the httpd service
+    service: name=httpd state=started
+  - debug:
+      msg: System {{ myname }} has uuid {{ ansible_product_uuid }}
+  - debug: msg="System {{ myname }} has uuid {{ ansible_product_uuid }}"
+  - debug: msg={{ ansible_product_uuid }}
+  - debug: var=ansible_product_uuid
+  - debug:
+      var: ansible_product_uuid
+...
+
+==================================================================
+"vars.yaml"
+
+---
+myname: "kb-varsfile"
+age: "5"
+...
