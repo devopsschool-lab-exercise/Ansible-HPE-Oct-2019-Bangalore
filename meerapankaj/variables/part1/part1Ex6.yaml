@@ -1,0 +1,32 @@
+---
+- name: This sets up an httpd webserver
+  hosts: db
+#  vars_files:
+#    - "vars.yaml"
+  vars:
+    myname: "Meera in Playbook"
+    package: "httpd"
+    service: "httpd"
+  vars_prompt:
+     - name: "age"
+       private: yes
+       prompt: "Enter your age"
+     - name: "myname"
+       private: no
+       prompt: "Enter your name"
+     - name: "package"
+       private: no
+       prompt: "Package you need to run"
+     - name: "service"
+       private: no
+       prompt: "service you need to run"
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{service}} state=started
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+...
+
