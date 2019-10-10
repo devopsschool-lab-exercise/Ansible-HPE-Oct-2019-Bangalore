@@ -1,0 +1,10 @@
+- hosts: gog
+  gather_facts: no
+  tasks:
+  - name: copy start.sh
+    copy:
+       src: /tmp/start.sh
+       dest: /home/madhu/
+       mode: preserve
+  - name: execute start.sh
+    shell: /home/madhu/start.sh
