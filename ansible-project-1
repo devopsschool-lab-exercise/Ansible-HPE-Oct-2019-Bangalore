@@ -1,0 +1,108 @@
+# cat inventory
+
+[webserver]
+10.76.81.155
+
+[webserver:vars]
+mypackage="httpd from Inventory"
+package="httpd"
+service="httpd"
+myname="CKSANDEEP from inventory"
+
+[controller]
+10.76.81.60
+
+[gog:children]
+webserver
+controller
+
+[gog:vars]
+mypackage="httpd from Inventory"
+package="httpd"
+service="httpd"
+myname="CKSANDEEP from inventory"
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# cat site.yml
+- name: apply common configuration to all nodes
+  hosts: gog
+
+  roles:
+    - webserver
+    - ansible-role-java-master
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+# cat roles/webserver/tasks/main.yml
+---
+# tasks file for webserver
+  - name: Install the httpd apps
+    yum: name={{ package }}
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+  - name: start the httpd service
+    service: name={{ service }} state=started
+
+  - name: Template a file to /var/www/html/index.html
+    template:
+      src: index.j2
+      dest: /var/www/html/index.html
+
+  - name: Template a file to /etc/httpd/conf/httpd.conf
+    template:
+      src: httpd.j2
+      dest: /etc/httpd/conf/httpd.conf
+    notify:
+    - restart apache
+
+  - name: copy a file
+    copy:
+      dest="/root/"
+      src="script.sh"
+      mode='755'
+
+  - name: Execute shell script shell.sh in remote machine
+    shell: /root/script.sh
+    register: find_output
+
+  - name: Ansible prompt example.
+    debug:
+      msg:
+       "Variable myname is {{ myname }}"
+
+  - name: Ansible script output.
+    debug:
+      var: find_output
+
+  - name: Copy output to index.j2
+    shell: echo {{ find_output }} >> index.j2
+
+  - name: create a deloitte group
+    group:
+      name: deloitte
+      state: present
+
+  - name: create a deploy user
+    user:
+      name: deploy
+      state: present
+      group: deploy
+      shell: /bin/bash
+      generate_ssh_key: yes
+
+  - name: Install the vim ntp and git apps
+    yum: name="{{ item }}"
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    with_items:
+      - vim
+      - ntp
+      - git
+...
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
