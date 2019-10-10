@@ -1,0 +1,21 @@
+[db]
+10.76.83.14 ansible_user=bandhisha ansible_ssh_user=root ansible_ssh_pass=bandhisha
+
+
+[db:vars]
+myname="Bandhisha is inventory"
+package="httpd"
+service="httpd"
+
+[web]
+10.76.82.254
+4.4.4
+5.5.5.6
+
+[common]
+10.76.82.254
+
+[gog:children]
+db
+common
+

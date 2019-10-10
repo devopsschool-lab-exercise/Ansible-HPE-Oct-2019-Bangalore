@@ -1,0 +1,13 @@
+---
+- name: This is for copying a creating and copying a file
+  hosts: db
+  tasks:
+  - name: copy a file
+    copy:
+      src: /root/script.sh
+      dest: /tmp/
+      mode: '0775'
+  - name: Run a script
+    script: script.sh
+...
+
