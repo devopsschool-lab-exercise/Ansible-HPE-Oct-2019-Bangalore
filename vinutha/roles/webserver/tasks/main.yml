@@ -1,0 +1,21 @@
+---
+# tasks file for webserver
+- name: Template a file to /etc/files.conf
+  template:
+     src: httpd.j2
+     dest: /etc/httpd/conf/httpd.conf
+  notify:
+  - restart apache
+- name: Install the httpd apps
+  yum: name={{ package }}
+- name: start the httpd service
+  service: name={{ service }} state=started
+- name: create a empty fle
+  file: dest=/opt/test.txt state=touch
+- name: copy a file
+  copy: dest=/var/www/html/ src="/root/index.html"
+- name: Ansible prompt example.
+  debug:
+     msg: "{{ myname }}"
+
+

@@ -1,0 +1,6 @@
+---
+# vars file for webserver
+myname: Vinutha
+package: httpd
+service: httpd
+#port: 8080

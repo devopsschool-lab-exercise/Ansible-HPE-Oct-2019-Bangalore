@@ -1,0 +1,7 @@
+---
+# defaults file for webserver
+#myname: Vinutha
+#package: httpd
+#service: httpd
+myport: 80
+
