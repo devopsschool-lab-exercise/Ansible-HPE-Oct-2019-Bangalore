@@ -1,2 +1,2 @@
-myname="rajesh kumar in Inventory"
-port=80
+myname: "rajesh kumar in Inventory"
+port: 80

@@ -1,0 +1,6 @@
+- name: apply common configuration to all nodes
+  hosts: db,web
+
+  roles:
+    - webserver1
+    - geerlingguy.java
