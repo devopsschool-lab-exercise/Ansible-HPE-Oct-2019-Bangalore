@@ -1,0 +1,4 @@
+---
+- name: Template a file to /etc/httpd/conf/httpd.conf
+  template: src=files/httpd.j2  dest=/etc/httpd/conf/httpd.conf
+

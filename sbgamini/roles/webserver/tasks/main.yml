@@ -1,0 +1,7 @@
+---
+# tasks file for webserver
+
+- import_tasks: install.yml
+- import_tasks: template.yml
+- import_tasks: configure.yml
+- import_tasks: service.yml

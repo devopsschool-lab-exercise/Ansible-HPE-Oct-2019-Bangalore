@@ -1,0 +1,12 @@
+[web]
+10.76.80.168 ansible_user=surendra ansible_become=yes
+
+[gog:children]
+git
+web
+
+[gog:vars]
+myname="in inventory_prod"
+package="httpd"
+service="httpd"
+port="80"
