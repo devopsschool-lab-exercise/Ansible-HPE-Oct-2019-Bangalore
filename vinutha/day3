@@ -1,0 +1,91 @@
+AnsiblevariableusingPlaybook.yaml:
+
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  tasks:
+  - name: Install the httpd apps
+    yum: name="{{ package }}"
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+
+ansible-playbook -i inventory AnsiblevariableusingPlaybook.yaml
+
+variable_using_external_file.yaml:
+
+vars.yaml
+---
+package: "httpd"
+service: "httpd"
+myname: "httpd"
+...
+~
+variable_using_external_file.yaml
+
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  vars_files:
+   - "vars.yaml"
+  tasks:
+  - name: Install the httpd apps
+    yum: name="{{ package }}"
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+	  
+ansible-playbook -i inventory variable_using_external_file.yaml
+
+
+variable_using_inventory.yaml:
+
+Inventory:
+
+
+[inventory:vars]
+package="httpd"
+service="httpd"
+myname="httpd"
+
+---
+- name: This sets up an httpd webserver
+  hosts: db
+  tasks:
+  - name: Install the httpd apps
+    yum: name="{{ package }}"
+  - name: start the httpd service
+    service: name={{ service }} state=started
+  - name: create a empty fle
+    file: dest=/opt/test.txt state=touch
+  - name: copy a file
+    copy: dest=/var/www/html/ src="/root/index.html"
+  - name: Ansible prompt example.
+    debug:
+      msg: "{{ myname }}"
+	  
+ansible-playbook -i inventory variable_using_inventory.yaml
+
+
+variable_using_command_prompt.yaml:
+
+---
+- name: This sets up an httpd webserver
+  hosts: all
+  tasks:
+   - debug: var=test_list
+...
+
+ ansible-playbook -c local -i localhost, variable_using_command_prompt.yaml --extra-vars='{"test_list": [1,2,3]}'

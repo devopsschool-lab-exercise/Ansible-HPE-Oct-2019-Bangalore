@@ -1,5 +1,15 @@
 -Excersice Variable part1:
 
+*****************************************************************************
+
+Priority:
+External variables
+prompt variable
+Playbook
+Inventory
+
+
+************************************************************************************
 
 Assigment 1 – Create a playbook and setup a webserver(httpd) and use httpd as a variable decalared in inventory.
 

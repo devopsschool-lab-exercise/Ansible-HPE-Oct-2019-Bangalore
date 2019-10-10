@@ -8,9 +8,11 @@
   vars_prompt:
     - name: "mypackage"
       prompt: "Which package do you want to install?"
+      private: yes
   vars_files:
     - "vars_asn3.yml"
   tasks:
+  - include_vars: vars_asn5.yml
   - name: Install the httpd apps
     yum:
       name={{ package }}
@@ -22,3 +24,4 @@
       msg:
        "Variable package is {{ mypackage }}"
 ...
+

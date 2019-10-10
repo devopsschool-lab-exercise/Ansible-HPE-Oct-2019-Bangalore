@@ -1,0 +1,7 @@
+---
+- name: MY Reboot playbook
+  hosts: web
+  tasks:
+  - name: reboot the machine
+    reboot: msg="Reboot initiated by Ansible"
+...

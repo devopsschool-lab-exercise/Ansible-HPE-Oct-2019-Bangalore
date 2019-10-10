@@ -1,0 +1,13 @@
+---
+- name: Create a file with the name script.sh at /tmp and transfer it to target node(s)
+  hosts: web
+  tasks:
+  - name: Create a file with the name script.sh at /tmp
+    file: state=touch dest=/tmp/script.sh mode=755
+  - name: Transfer the file /tmp/script.sh to target node(s)
+    copy: src=/tmp/script.sh dest=/tmp
+  - name: Execute /tmp/script.sh
+    script: /tmp/script.sh
+    args:
+      executable: /tmp/script.sh
+...

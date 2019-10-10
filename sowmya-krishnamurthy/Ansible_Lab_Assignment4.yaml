@@ -1,0 +1,102 @@
+Assigment 1 – Create a playbook and setup a webserver(httpd) and use httpd as a variable decalared in inventory.
+        [root@localhost ~]# cat inventory.ini
+        [db]
+        10.76.138.232 ansible_user=sowmya ansible_password=hpinvent  ansible_become=yes
+
+        [db:vars]
+        httpvar=httpd
+
+        [web]
+        4.4.4.4
+        5.5.5.6
+
+        [common]
+        10.76.138.232
+
+        [gog:children]
+        db
+        common
+
+        [root@localhost ~]# cat webserver.yaml
+        ---
+        - name: This sets up an http webserver
+          hosts: db
+          vars:
+            httpvar: "httpd"
+          tasks:
+          - name: Install the http apps
+            yum: name={{httpvar}}
+          - name: start the http_var service
+            service: name={{httpvar}} state=started
+          - name: create a empty fle
+            file: dest=/opt/test.txt state=touch
+          - name: copy a file
+            copy: dest=/var/www/html/ src="/root/index.html"
+        ...
+
+
+
+
+
+Assigment 2 – Create a playbook and setup a webserver(httpd) and use httpd as a variable decalared in Playbooks.
+
+        [root@localhost ~]# cat webserver.yaml
+        ---
+        - name: This sets up an http webserver
+          hosts: db
+          vars:
+            httpvar: "httpd"
+          tasks:
+          - name: Install the http apps
+            yum: name={{httpvar}}
+          - name: start the http_var service
+            service: name={{httpvar}} state=started
+          - name: create a empty fle
+            file: dest=/opt/test.txt state=touch
+          - name: copy a file
+            copy: dest=/var/www/html/ src="/root/index.html"
+        ...
+	
+Assigment 3 – Create a playbook and setup a webserver(httpd) and use httpd as a variable decalared in external file.
+	
+            [root@localhost ~]# cat webserver.yaml
+            ---
+            - name: This sets up an http webserver
+              hosts: db
+              vars_files:
+                - "external.yaml"
+              tasks:
+              - name: Install the http apps
+                yum: name={{httpvar}}
+              - name: start the http_var service
+                service: name={{httpvar}} state=started
+              - name: create a empty fle
+                file: dest=/opt/test.txt state=touch
+              - name: copy a file
+                copy: dest=/var/www/html/ src="/root/index.html"
+            ...
+
+
+Assigment 6 – Create a playbook and setup a webserver(httpd), pass the httpd package name decalared on command prompt
+
+    ansible-playbook -i inventory.ini webserver.yaml --extra-vars "httpvar=httpd"
+	
+            ---
+        - name: This sets up an http webserver
+          hosts: db
+          vars:
+             httpvar:{{httpvar}}
+          tasks:
+          - name: Install the http apps
+            yum: name={{httpvar}}
+          - name: start the http_var service
+            service: name={{httpvar}} state=started
+          - name: create a empty fle
+            file: dest=/opt/test.txt state=touch
+          - name: copy a file
+            copy: dest=/var/www/html/ src="/root/index.html"
+        ...
+        
+
+
+
