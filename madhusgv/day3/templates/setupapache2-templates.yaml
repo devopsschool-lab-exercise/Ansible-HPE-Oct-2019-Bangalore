@@ -1,0 +1,28 @@
+- hosts: web-prod,web-test
+  gather_facts: no
+  tasks:
+  - name: Install apache2
+    apt:
+       name: "{{package}}"
+       state: present
+  - name: Start apache2
+    service:
+       name: "{{service}}"
+       state: started
+       enabled: true
+  - name: Template a file to /etc/apache2/ports.conf
+    template:
+       src: /home/ansible-yml/ports.j2
+       dest: /etc/apache2/ports.conf
+    notify:
+       - restart apache
+
+  - name: Ansible variables
+    debug:
+       msg: "{{myname}}"
+  handlers:
+  - name: restart apache
+    service:
+       name: "{{service}}"
+       state: restarted
+    
