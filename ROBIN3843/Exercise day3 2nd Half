@@ -1,0 +1,101 @@
+[root@localhost Tree]# ansible-playbook site.yml
+
+PLAY [apply common configuration to all nodes] **************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************
+ok: [10.76.137.71]
+
+TASK [Robin_RG : Install the httpd apps] ********************************************************************************************
+ok: [10.76.137.71]
+
+TASK [Robin_RG : start the httpd service] *******************************************************************************************
+changed: [10.76.137.71]
+
+TASK [Robin_RG : Copy a index.j2] ***************************************************************************************************
+changed: [10.76.137.71]
+
+TASK [Robin_RG : Copy a httpd.j2] ***************************************************************************************************
+changed: [10.76.137.71]
+
+TASK [Robin_RG : create group deloitte] *********************************************************************************************
+changed: [10.76.137.71]
+
+TASK [Robin_RG : Create User and make member of deloitte] ***************************************************************************
+changed: [10.76.137.71]
+
+TASK [Robin_RG : to install a package called “git”] *********************************************************************************
+ok: [10.76.137.71]
+
+TASK [Robin_RG : to install a package called “ntp”] *********************************************************************************
+changed: [10.76.137.71]
+
+TASK [Robin_RG : to install a package called “vim”] *********************************************************************************
+changed: [10.76.137.71]
+
+TASK [Robin_RG : Print the variable Robing] *****************************************************************************************
+ok: [10.76.137.71] => {
+    "msg": "Robin in Playbook"
+}
+
+RUNNING HANDLER [restart apache] ****************************************************************************************************
+changed: [10.76.137.71]
+
+PLAY RECAP **************************************************************************************************************************
+10.76.137.71              : ok=11    changed=7    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+
+
+################################
+[root@localhost Tree]# vi site.yml
+- name: apply common configuration to all nodes
+  hosts: webservers
+
+  roles:
+   - Robin_RG
+
+
+##########################
+
+[root@localhost Tree]# cat Robin_RG/vars/main.yml
+---
+# vars file for Robin_RG
+    Robing: "Robin in Playbook"
+    package: "httpd"
+    service: "httpd"
+[root@localhost Tree]# cat Robin_RG/tasks/main.yml
+---
+# tasks file for Robin_RG
+- name: Install the httpd apps
+  yum: name={{ package }}
+- name: start the httpd service
+  service: name={{ service }} state=started
+- name: Copy a index.j2
+  copy: dest=/var/www/html/ src="/etc/ansible/Tree/Robin_RG/templates/index.j2"
+- name: Copy a httpd.j2
+  notify:
+  - restart apache
+  copy: dest=/etc/httpd/conf/httpd.conf src="/etc/ansible/Tree/Robin_RG/templates/httpd.j2"
+- name: create group deloitte
+  group: name=deloitte
+- name: Create User and make member of deloitte
+  user: name=Robin3 group=deloitte
+- name: to install a package called “git”
+  yum: state=present name=git
+- name: to install a package called “ntp”
+  yum: state=present name=ntp
+- name: to install a package called “vim”
+  yum: state=present name=vim
+- name: Print the variable Robing
+  debug:
+   msg: "{{ Robing }}"
+
+
+################################################
+
+[root@localhost Tree]# cat Robin_RG/handlers/main.yml
+---
+# handlers file for Robin_RG
+  - name: restart apache
+    service: name=httpd state=restarted
