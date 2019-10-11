@@ -1,0 +1,21 @@
+---
+- name: This playbook for the windows server
+  hosts: windows
+  tasks:
+  - name: create a directory
+    win_file:
+     path: c:\hpe\kavitha
+     state: directory
+  - name: Template a copy a file to windows file
+    win_template:
+      src: /root/kavitha/Hi.txt
+      dest: c:\hpe\kavitha\Hi.txt
+  - name: obtain information about a file
+    win_stat:
+      path: c:\hpe\kavitha\Hi.txt
+      get_checksum: yes
+      checksum_algorithm: md5
+    register: md5_checksum
+  - debug:
+      var: md5_checksum.stat.checksum
+...

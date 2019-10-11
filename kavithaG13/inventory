@@ -11,3 +11,13 @@ service="httpd"
 
 [gog:children]
 db
+
+[windows]
+13.233.146.9
+
+[windows:vars]
+ansible_user=Administrator
+ansible_password=.kbpn*&p9XK?LVG*.S$MaTR*;M6n$8B3
+ansible_connection=winrm
+ansible_winrm_transport=basic
+ansible_winrm_server_cert_validation=ignore
