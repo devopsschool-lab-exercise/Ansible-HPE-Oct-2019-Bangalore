@@ -37,3 +37,6 @@ ansible_password=Password
 ansible_connection=winrm
 ansible_winrm_transport=basic
 ansible_winrm_server_cert_validation=ignore
+
+
+https://stackoverflow.com/questions/19080352/how-to-get-pip-to-work-behind-a-proxy-server/20818379
