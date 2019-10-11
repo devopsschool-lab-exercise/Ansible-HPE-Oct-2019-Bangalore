@@ -1,0 +1,46 @@
+Yaml (win.yaml)
+
+---
+- name: Create a user group called ankan
+  hosts: windows
+  tasks:
+  - name: Create directory structure
+    win_file: path=C:\\hpe\\ankan1 state=directory
+   
+  - name: Copy a single file
+    win_copy: src=/root/ankan.txt dest=C:\\hpe\\ankan1\\ankan.txt
+    
+    
+...
+
+Inventory
+
+[windows]
+13.233.146.9
+[windows:vars]
+ansible_user=Administrator
+ansible_password=.kbpn*&p9XK?LVG*.S$MaTR*;M6n$8B3 
+ansible_connection=winrm
+ansible_winrm_transport=basic
+ansible_winrm_server_cert_validation=ignore
+
+----------------------------------
+Output:-
+
+[root@localhost ~]# ansible-playbook -i wininventory win.yaml
+
+PLAY [Create a user group called ankan] *********************************************************************************************************************
+
+TASK [Gathering Facts] **************************************************************************************************************************************
+ok: [13.233.146.9]
+
+TASK [Create directory structure] ***************************************************************************************************************************
+ok: [13.233.146.9]
+
+TASK [Copy a single file] ***********************************************************************************************************************************
+changed: [13.233.146.9]
+
+PLAY RECAP **************************************************************************************************************************************************
+13.233.146.9               : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+[root@localhost ~]#
