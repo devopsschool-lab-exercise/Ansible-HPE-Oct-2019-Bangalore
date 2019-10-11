@@ -27,3 +27,13 @@ ADHOC
 ansible all -i 13.233.146.9, -m win_ping
 
 PLAYBOOK
+
+
+[windows]
+13.233.160.153
+[windows:vars]
+ansible_user=LocalUsername
+ansible_password=Password
+ansible_connection=winrm
+ansible_winrm_transport=basic
+ansible_winrm_server_cert_validation=ignore
