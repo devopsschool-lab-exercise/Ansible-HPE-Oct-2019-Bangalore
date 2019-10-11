@@ -1,0 +1,13 @@
+[web]
+10.76.82.254 
+
+[db]
+10.76.83.14
+
+[gog:children]
+web
+db
+
+[gog:vars]
+ansible_user=root
+ansible_ssh_pass=bandhisha

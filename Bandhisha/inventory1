@@ -1,5 +1,5 @@
 [db]
-10.76.83.14 ansible_user=root ansible_ssh_pass=bandhisha
+192.168.0.105 ansible_user=root ansible_ssh_pass=bandhisha
 
 [db:vars]
 myname="Bandhisha is inventory"
@@ -7,12 +7,12 @@ package="httpd"
 service="httpd"
 
 [web]
-10.76.82.254
+192.168.0.104
 4.4.4
 5.5.5.6
 
 [common]
-10.76.82.254
+192.168.0.104
 
 [gog:children]
 db

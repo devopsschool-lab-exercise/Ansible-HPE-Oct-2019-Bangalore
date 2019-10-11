@@ -1,0 +1,50 @@
+---
+#Exercise from https://www.devopsschool.com/blog/ansible-playbook-lab-excercise-part-2/
+
+- name: Ansible Playbook Lab & Excercise - Part 2
+  hosts: db
+  tasks:
+#Write a Ansible Playbook to create a group called “deploy”
+  - name: Create a group called "deploy"
+    group: 
+     name: deploy
+#Write a Ansible Playbook to create a user called “deploy-user” which is part of group called “deploy” and with /bin/bash shell.
+  - name: Create a user called "deploy-user"
+    user:
+     name: deploy-user
+     group: deploy
+     shell: /bin/bash
+#Write a Ansible Playbook to install package named “httpd” in RHEL/centos.
+  - name: Install package named "httpd"
+    yum:
+     name: httpd
+#Write a Ansible Playbook to start and enable the service named “httpd”
+  - name: start the httpd service
+    service:
+     name: httpd
+     state: started
+#Write a Ansible Playbook to create a file called “index.html” in /var/www/html with some dummy html contents.
+  - name: create an empty fle
+    file:
+     dest: /var/www/html/index.html
+     state: touch
+  - name: copy a file with content
+    copy:
+     dest: /var/www/html/
+     src: index.html
+     #content: "<h1>A sample page created using Asible playbook<h1>"
+#Write a Ansible Playbook to reboot a self machine.
+  - name: Unconditionally reboot the machine with all defaults
+    reboot:
+#Write a Ansible Playbook to install a package called “git”, “wget”.
+  - name: Install a list of packages
+    yum:
+     name:
+      - git
+      - wget
+     state: present
+#Write a Ansible Playbook to clone git repo. thttps://github.com/scmgalaxy/ansible-role-template
+  - name: do a git clone
+    git:
+     repo: 'https://foosball.example.org/path/to/repo.git'
+     dest: /root/git
