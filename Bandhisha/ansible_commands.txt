@@ -21,5 +21,15 @@ ansible localhost -m reboot
 ansible localhost -m file -a "state=touch dest=/opt/devopsschool.txt state=absent"
 
 
+#Ansible playbook command
+ansible-playbook -i inventory exercise.yaml
+
+#ssh connection variable is encrypted in varsVault.yaml
+ansible-vault create varsVault.yaml
+ansible-playbook -i inventory3 --extra-vars '@varsVault.yaml' VariableDeclaredInInventory.yaml --ask-vault-pass
+
+#Command to ping a windows machine
+ansible windows -i inventory4 -m win_ping
+
 
 

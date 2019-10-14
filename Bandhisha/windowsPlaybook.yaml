@@ -1,0 +1,25 @@
+---
+- name: MY playbook to create a folder and file in remote windows
+  hosts: windows
+  vars:
+    package: "httpd"
+    service: "httpd"
+  tasks:
+  - name: Create a folder in remote windows
+    win_file:
+      path: C:\hpe\bandhisha
+      state: directory
+  - name: Copy a file from my server to remote windows
+    win_template:
+      src: /root/index.html
+      dest: C:\hpe\bandhisha\hi.txt
+  - name: Get information of the directory on remote windows
+    win_stat:
+      path: C:\hpe\bandhisha
+      get_checksum: yes
+      checksum_algorithm: md5
+    register: md5_checksum
+
+  - debug:
+      var: md5_checksum.stat.checksum
+...

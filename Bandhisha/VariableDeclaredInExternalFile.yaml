@@ -1,0 +1,16 @@
+---
+#Assignment from https://www.devopsschool.com/blog/ansible-variable-lab-excercise-part-1/
+#Assigment 3 – Create a playbook and setup a webserver(httpd) and use httpd as a variable decalared in external file
+#Variables - package and service are declared in externalfile.yaml
+#Using file inventory2 since it is not having vars decalared.
+#Command used here: ansible-playbook -i inventory2 VariableDeclaredInExternal.yaml
+- name: MY playbook with variables in external file
+  hosts: db
+  vars_files: 
+  - "externalfile.yaml"
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{ service }} state=started  
+...

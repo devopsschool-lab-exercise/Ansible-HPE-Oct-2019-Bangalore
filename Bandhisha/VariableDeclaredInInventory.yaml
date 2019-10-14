@@ -1,0 +1,13 @@
+---
+#Assignment from https://www.devopsschool.com/blog/ansible-variable-lab-excercise-part-1/
+#Assigment 1 – Create a playbook and setup a webserver(httpd) and use httpd as a variable decalared in inventory.
+#Variables - package and service are declared in inventory(check the file inventory)
+#Command used here: ansible-playbook -i inventory VariableDeclaredInInventory.yaml
+- name: MY playbook with variables in inventory
+  hosts: db
+  tasks:
+  - name: Install the httpd apps
+    yum: name={{ package }}
+  - name: start the httpd service
+    service: name={{ service }} state=started  
+...

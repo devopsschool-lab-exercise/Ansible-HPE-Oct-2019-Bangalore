@@ -46,5 +46,5 @@
 #Write a Ansible Playbook to clone git repo. thttps://github.com/scmgalaxy/ansible-role-template
   - name: do a git clone
     git:
-     repo: 'https://foosball.example.org/path/to/repo.git'
+     repo: 'https://github.com/scmgalaxy/ansible-role-template'
      dest: /root/git
