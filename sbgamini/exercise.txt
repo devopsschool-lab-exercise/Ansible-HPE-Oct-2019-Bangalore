@@ -7,3 +7,30 @@ ansible localhost -m copy -a "src=second.html dest=/var/www/html"
 ansible localhost -m yum -a "state=present name=git"
 ansible localhost -m yum -a "state=present name=wget"
 ansible localhost -m git -a "repo=https://github.com/scmgalaxy/ansible-role-template dest=scmgalaxy"
+
+Day 4
+
+Create a file "Hi.txt" in Target Windows Machine
+
+[root@localhost ~]# ansible windows -m win_lineinfile -a "path=C:\hpe\sbgamini\Hi.txt line=Gamini"
+13.233.146.9 | CHANGED => {
+    "backup": "",
+    "changed": true,
+    "encoding": "utf-8",
+    "msg": "line added"
+}
+[root@localhost ~]# ansible windows -m win_lineinfile -a "path=C:\hpe\sbgamini\Hi.txt line='Welcome Gamini'"
+13.233.146.9 | CHANGED => {
+    "backup": "",
+    "changed": true,
+    "encoding": "utf-8",
+    "msg": "line added"
+}
+
+[root@localhost ~]# ansible windows -m win_lineinfile -a "path=C:\hpe\sbgamini\Hi.txt line='Welcome Gamini! to DevOps'"
+13.233.146.9 | CHANGED => {
+    "backup": "",
+    "changed": true,
+    "encoding": "utf-8",
+    "msg": "line added"
+}

@@ -1,0 +1,42 @@
+Working with Ansible in Windows
+================================
+
+
+ACS
+--------------------
+LINUX 64 BIT ------ Windows
+---------HTTP--------------
+        WINRM
+===========================
+What should be the changes in ARS? - WINDOWS
+https://www.devopsschool.com/tutorial/ansible/ansible-windows-remote-setup.html
+
+What should be the changes in ACS?
+https://www.devopsschool.com/tutorial/ansible/ansible-windows-control-setup.html
+
+What should be the changes in Playboook
+---------------------------------------
+Public DNS	ec2-13-233-146-9.ap-south-1.compute.amazonaws.com
+13.233.146.9
+User name	Administrator
+Password	
+.kbpn*&p9XK?LVG*.S$MaTR*;M6n$8B3 
+
+====================================
+ADHOC
+ansible all -i 13.233.146.9, -m win_ping
+
+PLAYBOOK
+
+
+[windows]
+13.233.160.153
+[windows:vars]
+ansible_user=LocalUsername
+ansible_password=Password
+ansible_connection=winrm
+ansible_winrm_transport=basic
+ansible_winrm_server_cert_validation=ignore
+
+
+https://stackoverflow.com/questions/19080352/how-to-get-pip-to-work-behind-a-proxy-server/20818379
